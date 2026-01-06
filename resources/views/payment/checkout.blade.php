@@ -417,11 +417,6 @@
                 </ul>
             </footer>
         </div>
-        <script
-            src="../assets/dist/js/bootstrap.bundle.min.js"
-            class="astro-vvvwv3sm"
-        ></script>
-        <script src="checkout.js" class="astro-vvvwv3sm"></script>
 
     </div>
 
