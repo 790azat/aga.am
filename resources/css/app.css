@@ -1,0 +1,12 @@
+@import url('https://fonts.bunny.net/css?family=Nunito');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css');
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+a {
+    color: unset !important;
+    text-decoration: unset !important;
+}
+p {
+    margin: 0 !important;
+    padding: 0 !important;
+}
