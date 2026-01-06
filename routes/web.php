@@ -6,6 +6,9 @@ use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
 Route::get('/', PosterController::class . '@index')->name('home');
+Route::get('checkout',  function () {
+    return view('payment.checkout');
+})->name('checkout');
 
 Route::get('/migrate', function () {
     Artisan::call('db:wipe');
@@ -40,6 +43,3 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
