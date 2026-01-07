@@ -99,7 +99,8 @@
             </div>
         </div>
     </div>
-@include('components.layouts.app.footer')
+
+    @include('components.layouts.app.footer')
 </body>
 </html>
 
