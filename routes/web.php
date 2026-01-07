@@ -5,7 +5,13 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 
+Route::get('/reset', function () {
+    Artisan::call('migrate:fresh');
+    Artisan::call('db:seed');
+    return back();
+});
 Route::get('/', PosterController::class . '@index')->name('home');
+
 Route::get('checkout',  function () {
     return view('payment.checkout');
 })->name('checkout');
