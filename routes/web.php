@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PosterController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -8,19 +9,13 @@ use Livewire\Volt\Volt;
 Route::get('/reset', function () {
     Artisan::call('migrate:fresh');
     Artisan::call('db:seed');
-    return back();
+    return redirect('/');
 });
 Route::get('/', PosterController::class . '@index')->name('home');
 
 Route::get('checkout',  function () {
     return view('payment.checkout');
 })->name('checkout');
-
-Route::get('/migrate', function () {
-    Artisan::call('db:wipe');
-    Artisan::call('migrate --fresh');
-    return back();
-});
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -47,5 +42,5 @@ Route::middleware(['auth'])->group(function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
