@@ -39,7 +39,7 @@
             @auth
                 <div>
                     <div class="btn btn-outline-light rounded rounded-pill px-3 py-2">
-                        <a href="{{ route('dashboard') }}">
+                        <a href="{{ route('home') }}">
                             <p>{{ Auth::user()->name }} <i class="fa-solid fa-user ms-1"></i></p>
                         </a>
                     </div>

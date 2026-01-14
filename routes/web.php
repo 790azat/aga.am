@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PosterController;
 use Illuminate\Support\Facades\Route;
@@ -11,7 +12,7 @@ Route::get('/reset', function () {
     Artisan::call('db:seed');
     return redirect('/');
 });
-Route::get('/', PosterController::class . '@index')->name('home');
+Route::get('/', PosterController::class . '@index');
 
 Route::get('checkout',  function () {
     return view('payment.checkout');
@@ -42,5 +43,17 @@ Route::middleware(['auth'])->group(function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])
+    ->middleware('auth', 'verified', 'user.type')
+    ->name('home');
+
+Route::get('/admin/dashboard', AdminController::class . '@index')->name('admin.dashboard');
+
+
+
+
+
+
+
+
 
