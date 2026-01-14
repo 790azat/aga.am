@@ -20,7 +20,7 @@
 </head>
 <body style="background: #181818">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark text-light shadow-sm">
+        <nav id="navbar" class="navbar navbar-expand-md navbar-dark bg-dark text-light shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('images/aga logo.png') }}" style="width: 36px" alt="">

@@ -48,6 +48,10 @@ Route::get('/home', [HomeController::class, 'index'])
     ->name('home');
 
 Route::get('/admin/dashboard', AdminController::class . '@index')->name('admin.dashboard');
+Route::get('/admin/moderators', AdminController::class . '@moderators')->name('admin.moderators');
+Route::get('/admin/videos', AdminController::class . '@videos')->name('admin.videos');
+Route::get('/admin/users', AdminController::class . '@users')->name('admin.users');
+Route::get('/admin/settings', AdminController::class . '@settings')->name('admin.settings');
 
 
 
