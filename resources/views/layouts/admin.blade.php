@@ -6,7 +6,7 @@
 
             <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.dashboard') ? 'text-light' : 'text-secondary' }} mt-5">
                 <a href="{{ route('admin.dashboard') }}">
-                    <i class="fa-solid fa-home me-1"></i> Dashboard
+                    <i class="fa-solid fa-gauge-high me-1"></i> Dashboard
                 </a>
             </div>
 
@@ -25,6 +25,18 @@
             <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.users*') ? 'text-light' : 'text-secondary' }}">
                 <a href="{{ route('admin.users') }}">
                     <i class="fa-solid fa-users me-1"></i> Users
+                </a>
+            </div>
+
+            <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.cashier*') ? 'text-light' : 'text-secondary' }}">
+                <a href="{{ route('admin.cashier') }}">
+                    <i class="fa-solid fa-cash-register me-1"></i> Cashier
+                </a>
+            </div>
+
+            <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.history*') ? 'text-light' : 'text-secondary' }}">
+                <a href="{{ route('admin.history') }}">
+                    <i class="fa-solid fa-clock-rotate-left me-1"></i> History
                 </a>
             </div>
 

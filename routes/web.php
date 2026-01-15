@@ -51,6 +51,8 @@ Route::get('/admin/dashboard', AdminController::class . '@index')->name('admin.d
 Route::get('/admin/moderators', AdminController::class . '@moderators')->name('admin.moderators');
 Route::get('/admin/videos', AdminController::class . '@videos')->name('admin.videos');
 Route::get('/admin/users', AdminController::class . '@users')->name('admin.users');
+Route::get('/admin/cashier', AdminController::class . '@cashier')->name('admin.cashier');
+Route::get('/admin/history', AdminController::class . '@history')->name('admin.history');
 Route::get('/admin/settings', AdminController::class . '@settings')->name('admin.settings');
 
 
