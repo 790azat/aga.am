@@ -1,70 +1,54 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    @include('partials.head')
-</head>
-
-<body class="min-vh-100 bg-light">
-
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-    <div class="container-fluid">
-
-        <!-- Mobile toggle -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+<nav id="navbar" class="navbar navbar-expand-md navbar-dark bg-dark text-light shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url('/') }}">
+            <img src="{{ asset('images/aga logo.png') }}" style="width: 36px" alt="">
+            {{ config('app.name', 'Laravel') }}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Logo -->
-        <a href="{{ route('dashboard') }}" class="navbar-brand ms-2">
-            <x-app-logo />
-        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left Side Of Navbar -->
+            <ul class="navbar-nav me-auto">
 
-        <!-- Desktop menu -->
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a
-                        href="{{ route('dashboard') }}"
-                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                    >
-                        Dashboard
-                    </a>
-                </li>
             </ul>
 
-            <!-- Right menu -->
-            <ul class="navbar-nav align-items-center gap-2">
+            <!-- Right Side Of Navbar -->
+            <ul class="navbar-nav ms-auto">
+                <!-- Authentication Links -->
+                @guest
+                    @if (Route::has('login'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                    @endif
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#" title="Search">
-                        🔍
-                    </a>
-                </li>
+                    @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                    @endif
+                @else
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <i class="fa-solid fa-user me-1"></i> {{ Auth::user()->name }}
+                        </a>
 
-                <li class="nav-item d-none d-lg-block">
-                    <a class="nav-link" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                        Repository
-                    </a>
-                </li>
+                        <div class="dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i> {{ __('Logout') }}
+                            </a>
 
-                <li class="nav-item d-none d-lg-block">
-                    <a class="nav-link" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                        Docs
-                    </a>
-                </li>
-
-                <!-- User dropdown -->
-                <li class="nav-item dropdown">
-                    <a
-                        class="nav-link dropdown-toggle"
-                        href="#"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                    >
-                        {{ auth()->user()->initials() }}
-                    </a>
-
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li class="px-3 py-2">
-                            <div class="fw-semibold">{{ auth()->user()->name }}</div>
-                            <div class="text-muted small">{{ auth()->user()->e
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
+                @endguest
+            </ul>
+        </div>
+    </div>
+</nav>

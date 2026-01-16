@@ -6,10 +6,12 @@ a {
     color: unset !important;
     text-decoration: unset !important;
 }
+
 p {
     margin: 0 !important;
     padding: 0 !important;
 }
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -90,4 +92,36 @@ p {
 
 .bd-mode-toggle .dropdown-menu .active .bi {
     display: block !important;
+}
+
+.slider-track {
+    scroll-behavior: smooth;
+}
+
+.slider-card {
+    flex: 0 0 calc(100% / 6.5); /* 6 + half */
+    max-width: calc(100% / 6.5);
+    transition: transform .3s;
+}
+
+.slider-card:hover {
+    transform: scale(1.08);
+    z-index: 2;
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 40%;
+    z-index: 10;
+    opacity: .85;
+}
+
+.dropdown-menu.bg-dark .dropdown-item {
+    color: #f8f9fa; /* text-light color */
+}
+
+.dropdown-menu.bg-dark .dropdown-item:hover,
+.dropdown-menu.bg-dark .dropdown-item:focus {
+    background-color: #343a40 !important; /* keep dark on hover */
+    color: #f8f9fa !important; /* keep text light */
 }

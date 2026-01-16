@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="col-12">
         <div class="container row row-cols-3">
             @foreach($videos as $video)
