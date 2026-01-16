@@ -5,35 +5,36 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <title>AGA | Interactive Film Financing & Creative Platform</title>
 
-    <link rel="shortcut icon" href="{{ asset('images/aga logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/aga logo.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('images/aga logo.png') }}">
 
     <meta name="title" content="AGA | Interactive Film Financing & Creative Platform">
-    <meta name="description"
-          content="AGA is a digital platform where subscriptions act as votes for film funding. Watch vertical pilot reels, support creators, and become a co-producer. Presented by Andranik Abrahamyan.">
-    <meta name="keywords"
-          content="AGA platform, film financing, Andranik Abrahamyan, vertical video, creative industry, audience voting, movie production, co-producer, pilot reels, Armenian startup">
+    <meta name="description" content="AGA is a digital platform where subscriptions act as votes for film funding. Watch vertical pilot reels, support creators, and become a co-producer. Presented by Andranik Abrahamyan.">
+    <meta name="keywords" content="AGA platform, film financing, Andranik Abrahamyan, vertical video, creative industry, audience voting, movie production, co-producer, pilot reels, Armenian startup">
     <meta name="author" content="Andranik Abrahamyan">
     <meta name="robots" content="index, follow">
 
+    <link rel="canonical" href="{{ url()->current() }}" />
+
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aga.com/">
-    <meta property="og:title" content="AGA - The Future of Creative Project Financing">
-    <meta property="og:description"
-          content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote for production funding via subscriptions.">
+    <meta property="og:url" content="https://aga.am/">
+    <meta property="og:title" content="AGA | Interactive Film Financing & Creative Platform">
+    <meta property="og:description" content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote for production funding via subscriptions.">
+    <meta property="og:image" content="{{ asset('images/meta.png') }}">
     <meta property="og:site_name" content="AGA">
 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://aga.com/">
-    <meta property="twitter:title" content="AGA | Interactive Film Financing">
-    <meta property="twitter:description"
-          content="A participatory platform where your subscription funds the next big hit. Watch vertical pilots and vote for projects to be realized.">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#000000">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://aga.am/">
+    <meta name="twitter:title" content="AGA | Interactive Film Financing & Creative Platform">
+    <meta name="twitter:description" content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote.">
+    <meta name="twitter:image" content="{{ asset('images/meta.png') }}">
 
 </head>
 <body style="background: #181818">

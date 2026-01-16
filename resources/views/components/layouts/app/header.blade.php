@@ -36,10 +36,10 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item d-flex justify-content-center" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                <i class="fa-solid fa-right-from-bracket me-1"></i> {{ __('Logout') }}
+                                <span class="text-danger"><i class="fa-solid fa-right-from-bracket me-1"></i></span> {{ __('Logout') }}
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
