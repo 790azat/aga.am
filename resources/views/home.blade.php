@@ -116,7 +116,7 @@
                     <!-- Slider -->
                     <div id="cardSlider" class="d-flex gap-3 overflow-hidden slider-track">
                         @foreach(collect($films)->take(12) as $film)
-                            <a href="/film/{{ $film['kinopoiskId'] }}" class="slider-card d-flex flex-column"
+                            <a href="/film/1" class="slider-card d-flex flex-column"
                                style="width: 150px; margin: 0 10px;">
                                 <div style="height: 280px; overflow: hidden; border-radius: 8px;">
                                     <img
