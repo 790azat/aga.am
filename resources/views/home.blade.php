@@ -120,7 +120,7 @@
                                style="width: 150px; margin: 0 10px;">
                                 <div style="height: 280px; overflow: hidden; border-radius: 8px;">
                                     <img
-                                        src="{{ $film->poster ? 'https://aga.am/public/storage/posters/' . $film->poster : asset('images/poster-placeholder.png') }}"
+                                        src="{{ $film->poster ? 'https://aga.am/public/storage/' . $film->poster : asset('images/poster-placeholder.png') }}"
                                         alt="{{ $film->name }}"
                                         style="width: 100%; height: 100%; object-fit: cover; display: block;">
                                 </div>
