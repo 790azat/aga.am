@@ -116,49 +116,47 @@
                     <!-- Slider -->
                     <div id="cardSlider" class="d-flex gap-3 overflow-hidden slider-track">
                         @foreach(collect($films)->take(12) as $film)
-                            <a href="/film/1" class="slider-card d-flex flex-column"
+                            <a href="/film/{{ $film->id }}" class="slider-card d-flex flex-column"
                                style="width: 150px; margin: 0 10px;">
                                 <div style="height: 280px; overflow: hidden; border-radius: 8px;">
                                     <img
-                                        src="{{ Str::contains($film['posterUrlPreview'], 'no-poster.png') ? asset('images/poster-placeholder.png') : $film['posterUrlPreview'] }}"
-                                        alt="{{ $film['nameRu'] ?? 'Poster' }}"
+                                        src="{{ $film->poster ? 'https://aga.am/public/storage/posters/' . $film->poster : asset('images/poster-placeholder.png') }}"
+                                        alt="{{ $film->name }}"
                                         style="width: 100%; height: 100%; object-fit: cover; display: block;">
                                 </div>
                                 <div class="col-12 mt-3">
                                     <p class="text-light">
-                                        {{ $film['nameRu'] ?? 'No title available' }}
+                                        {{ $film->name }}
                                     </p>
                                 </div>
 
                                 <div class="col-12 d-flex mt-1">
-                                    <divl class="col">
-                                        <p class="text-secondary">{{ $film['year'] }}</p>
-                                    </divl>
-                                    <div class="d-flex col-auto gap-2 me-3">
-                                        <divl class="col">
-                                            <p class="text-danger"><i class="fa-solid fa-heart"></i></p>
-                                        </divl>
-                                        <divl class="col">
-                                            <p class="text-danger"><i class="fa-solid fa-eye"></i></p>
-                                        </divl>
+                                    <div class="col">
+                                        <p class="text-secondary">{{ $film->year }}</p>
                                     </div>
-                                    <divl class="col-auto">
-                                        <p class="text-warning"><i
-                                                class="fa-solid fa-star me-1"></i> {{ $film['ratingKinopoisk'] }}</p>
-                                    </divl>
+                                    <div class="d-flex col-auto gap-2 me-3">
+                                        <div class="col">
+                                            <p class="text-danger"><i class="fa-solid fa-heart"></i></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-danger"><i class="fa-solid fa-eye"></i></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <p class="text-warning"><i class="fa-solid fa-star me-1"></i> 7.5</p>
+                                    </div>
                                 </div>
                             </a>
                         @endforeach
-
                     </div>
 
                     <!-- Right arrow -->
                     <button class="btn btn-dark slider-arrow end-0" onclick="slideRight()">❯</button>
 
                 </div>
-
             </div>
         </div>
+
 
         <div class="col-12 mb-5">
             <div class="container">

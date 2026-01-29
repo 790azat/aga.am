@@ -4,7 +4,7 @@
     $icons = [
         'dashboard'  => 'gauge-high',
         'moderators' => 'user-tie',
-        'videos'     => 'video',
+        'films'     => 'video',
         'users'      => 'users',
         'cashier'      => 'cash-register',
         'history'      => 'clock-rotate-left',

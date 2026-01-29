@@ -19,10 +19,6 @@ Route::get('checkout',  function () {
     return view('payment.checkout');
 })->name('checkout');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
@@ -50,13 +46,16 @@ Route::get('/home', [HomeController::class, 'index'])
 
 Route::get('/admin/dashboard', AdminController::class . '@index')->name('admin.dashboard');
 Route::get('/admin/moderators', AdminController::class . '@moderators')->name('admin.moderators');
-Route::get('/admin/videos', AdminController::class . '@videos')->name('admin.videos');
+Route::get('/admin/films', AdminController::class . '@films')->name('admin.films');
 Route::get('/admin/users', AdminController::class . '@users')->name('admin.users');
 Route::get('/admin/cashier', AdminController::class . '@cashier')->name('admin.cashier');
 Route::get('/admin/history', AdminController::class . '@history')->name('admin.history');
 Route::get('/admin/settings', AdminController::class . '@settings')->name('admin.settings');
 
 Route::get('/film/{film_id}', FilmController::class . '@index');
+
+Route::post('/film/upload', [FilmController::class, 'upload'])
+    ->name('film.upload');
 
 
 

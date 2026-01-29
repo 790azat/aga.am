@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Film;
 use App\Models\Videos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -28,25 +29,7 @@ class HomeController extends Controller
     public function index()
     {
 
-        $data = Cache::remember('kinopoisk_films_rating_page_1', now()->addHours(6), function () {
-            return Http::withHeaders([
-                'accept' => 'application/json',
-                'X-API-KEY' => env('KINOPOISK_API_KEY'),
-            ])->get(
-                'https://kinopoiskapiunofficial.tech/api/v2.2/films',
-                [
-                    'order' => 'RATING',
-                    'type' => 'ALL',
-                    'ratingFrom' => 0,
-                    'ratingTo' => 10,
-                    'yearFrom' => 1000,
-                    'yearTo' => 3000,
-                    'page' => 1,
-                ]
-            )->json();
-        });
-
-        $films = $data['items'] ?? [];
+        $films = Film::all();
 
         return view('home', compact('films'));
 

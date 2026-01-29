@@ -8,10 +8,11 @@
             <div class="col-9 mx-auto d-flex">
                 <div class="col-6 d-flex flex-column justify-content-end pb-5 gap-3">
                     <div class="col-12 d-flex justify-content-start align-items-center gap-3">
-                        <div class="btn btn-danger rounded-pill my-2 px-4"><i class="fa-solid fa-play me-1"></i> Watch
+                        <div class="btn btn-danger rounded-pill my-2 px-4" >
+                            <i class="fa-solid fa-play me-1"></i> Watch
                         </div>
-                        <div class="btn btn-dark rounded-pill my-2 px-4"><i class="fa-solid fa-plus me-1"></i> Add to my
-                            playlist
+                        <div class="btn btn-dark rounded-pill my-2 px-4">
+                            <i class="fa-solid fa-plus me-1"></i> Add to my playlist
                         </div>
                         <div class="col-auto d-flex gap-2">
                             <div class="col"><i class="fa-solid fa-star text-warning"></i></div>
@@ -49,8 +50,8 @@
                     </div>
                     <div class="col-12">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, aliquam aperiam asperiores ex
-                            excepturi in incidunt inventore ipsam itaque iusto laudantium libero, magnam non officia
-                            optio perferendis quia rem rerum.</p>
+                            excepturi in incidunt inventore ipsam itaaque iusto laudantium libero, magnam non officia
+                            optio perferendis quia rem rerum</p>
                     </div>
                     <div class="col-12 d-flex text-nowrap">
                         <div class="col-auto border-end pe-5">
@@ -97,7 +98,7 @@
                         @for($i = 1;$i <= 6; $i++)
                             <div class="col">
                                 <div class="col-12 mb-2">
-                                    <img src="{{ asset('images/ryan.jpg') }}" style="width: 100%" alt="">
+                                    <div style="background-image: url('{{ asset('images/actor ' . '(' . $i . ').jfif') }}');width: 100px;height: 100px;background-size: cover;background-position: center"></div>
                                 </div>
                                 <divl class="col-12 text-nowrap">
                                     <p>Ryan Gosling</p>

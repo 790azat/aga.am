@@ -16,9 +16,9 @@
                 </a>
             </div>
 
-            <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.videos*') ? 'text-light' : 'text-secondary' }}">
-                <a href="{{ route('admin.videos') }}">
-                    <i class="fa-solid fa-video me-1"></i> Videos
+            <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.films*') ? 'text-light' : 'text-secondary' }}">
+                <a href="{{ route('admin.films') }}">
+                    <i class="fa-solid fa-video me-1"></i> Films
                 </a>
             </div>
 
