@@ -57,6 +57,9 @@ Route::get('/film/{film_id}', FilmController::class . '@index');
 Route::post('/film/upload', [FilmController::class, 'upload'])
     ->name('film.upload');
 
+Route::delete('/films/{id}', [FilmController::class, 'destroy'])->name('films.destroy');
+
+
 
 
 
