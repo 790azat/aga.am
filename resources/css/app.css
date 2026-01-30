@@ -125,3 +125,105 @@ p {
     background-color: #343a40 !important; /* keep dark on hover */
     color: #f8f9fa !important; /* keep text light */
 }
+.actor-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background: #1e1e1e;
+    box-shadow: 0 6px 18px rgba(0,0,0,.5);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.actor-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(12px);
+    transition: filter .4s ease;
+}
+
+/* убираем blur когда загрузилось */
+.actor-avatar:not(.skeleton) img {
+    filter: blur(0);
+}
+
+/* hover эффект */
+.actor-avatar:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 28px rgba(0,0,0,.7);
+}
+
+/* skeleton shimmer */
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        #2a2a2a 25%,
+        #3a3a3a 37%,
+        #2a2a2a 63%
+    );
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.related-card {
+    text-decoration: none;
+    transition: transform .25s ease;
+}
+
+.related-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background: #1e1e1e;
+    box-shadow: 0 6px 18px rgba(0,0,0,.5);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.related-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(12px);
+    transition: filter .4s ease;
+}
+
+/* blur-up после загрузки */
+.related-poster:not(.skeleton) img {
+    filter: blur(0);
+}
+
+/* hover эффект */
+.related-card:hover .related-poster {
+    transform: scale(1.08);
+    box-shadow: 0 12px 28px rgba(0,0,0,.7);
+}
+
+/* skeleton shimmer */
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        #2a2a2a 25%,
+        #3a3a3a 37%,
+        #2a2a2a 63%
+    );
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+

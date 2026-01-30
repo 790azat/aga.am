@@ -16,11 +16,13 @@
                 <div class="col-6 d-flex flex-column justify-content-end gap-3">
                     <div class="col-12 mb-3">
                         <div style="width: 200px" class="rounded-2 overflow-hidden">
-                            <img src="{{ $film->poster ? asset('public/storage/' . $film->poster) : asset('images/poster-placeholder.png') }}" style="width: 100%;height: 100%" alt="">
+                            <img
+                                src="{{ $film->poster ? asset('public/storage/' . $film->poster) : asset('images/poster-placeholder.png') }}"
+                                style="width: 100%;height: 100%" alt="">
                         </div>
                     </div>
                     <div class="col-12 d-flex justify-content-start align-items-center gap-3">
-                        <a href="{{ $film->video ? asset('public/storage/videos/' . $film->video) : '#' }}"
+                        <a href="{{ $film->video ? asset('public/storage/' . $film->video) : '#' }}"
                            class="btn btn-danger rounded-pill my-2 px-4 text-light">
                             <i class="fa-solid fa-play me-1"></i> Watch
                         </a>
@@ -59,7 +61,9 @@
                 <div class="col-6 text-light d-flex flex-column gap-4 justify-content-center">
                     <div class="col-12 d-flex justify-content-center align-items-center">
                         <div style="width: 100px">
-                            <img src="{{ $film->logo ? asset('public/storage/' . $film->logo) : asset('images/logo-placeholder.png') }}" style="width: 100%" alt="{{ $film->name }}">
+                            <img
+                                src="{{ $film->logo ? asset('public/storage/' . $film->logo) : asset('images/logo-placeholder.png') }}"
+                                style="width: 100%" alt="{{ $film->name }}">
                         </div>
                     </div>
                     <div class="col-12 text-nowrap">
@@ -78,17 +82,22 @@
                     </div>
                     <div class="col-12 d-flex text-nowrap">
                         <div class="col-auto border-end pe-5">
-                            <div class="col-12"><i class="fa-solid fa-user-tie me-1"></i><span class="fw-bold">Director:</span> {{ $film->director ?? 'N/A' }}</div>
+                            <div class="col-12"><i class="fa-solid fa-user-tie me-1"></i><span
+                                    class="fw-bold">Director:</span> {{ $film->director ?? 'N/A' }}</div>
                             @if($film->actors)
                                 @foreach(explode(',', $film->actors) as $actor)
-                                    <div class="col-12"><i class="fa-solid fa-masks-theater me-1"></i> {{ trim($actor) }}</div>
+                                    <div class="col-12"><i
+                                            class="fa-solid fa-masks-theater me-1"></i> {{ trim($actor) }}</div>
                                 @endforeach
                             @endif
                         </div>
                         <div class="col ps-5">
-                            <div class="col-12"><i class="fa-solid fa-calendar me-1"></i> {{ $film->year ?? 'N/A' }}</div>
-                            <div class="col-12"><i class="fa-solid fa-circle-nodes me-1"></i> {{ $film->main_genre ?? 'N/A' }}</div>
-                            <div class="col-12"><i class="fa-solid fa-icons me-1"></i> {{ $film->genres ?? 'N/A' }}</div>
+                            <div class="col-12"><i class="fa-solid fa-calendar me-1"></i> {{ $film->year ?? 'N/A' }}
+                            </div>
+                            <div class="col-12"><i
+                                    class="fa-solid fa-circle-nodes me-1"></i> {{ $film->main_genre ?? 'N/A' }}</div>
+                            <div class="col-12"><i class="fa-solid fa-icons me-1"></i> {{ $film->genres ?? 'N/A' }}
+                            </div>
                         </div>
                         <div class="col-6"></div>
                     </div>
@@ -113,30 +122,50 @@
                 <div class="col-7">
                     <div class="col-12 mb-3"><p>Cast & Crew</p></div>
                     <div class="col-12 d-flex justify-content-start gap-3">
-                        @if($film->actors)
-                            @foreach(explode(',', $film->actors) as $actor)
-                                <div class="col text-center">
-                                    <div style="background-image: url('{{ asset('images/actor-placeholder.png') }}');width: 100px;height: 100px;background-size: cover;background-position: center; border-radius: 8px;"></div>
-                                    <p class="text-light mt-2">{{ trim($actor) }}</p>
+                        @if(!empty($film->actors))
+                            @foreach(array_filter(array_map('trim', explode(',', $film->actors))) as $actor)
+                                <div class="col-auto text-center">
+                                    <div class="actor-avatar skeleton">
+                                        <img
+                                            src="{{ asset('images/actor-placeholder.png') }}"
+                                            alt="{{ $actor }}"
+                                            loading="lazy"
+                                            onload="this.parentElement.classList.remove('skeleton')"
+                                        >
+                                    </div>
+                                    <p class="text-light mt-2 mb-0">{{ $actor }}</p>
                                 </div>
                             @endforeach
                         @endif
+
                     </div>
 
                     <div class="col-12 mt-4">
                         <div class="col-12 mb-3"><p>More Like {{ $film->name }}</p></div>
                         <div class="col-12 py-2 d-flex gap-3 overflow-auto">
-                            @if(isset($relatedFilms))
+                            @if(!empty($relatedFilms))
                                 @foreach($relatedFilms as $related)
-                                    <a href="{{ route('film.show', $related->id) }}" class="col d-flex flex-column" style="min-width:120px;">
-                                        <div style="height: 100px; overflow: hidden; border-radius: 8px;">
-                                            <img src="{{ $related->poster ? asset('public/storage/posters/' . $related->poster) : asset('images/poster-placeholder.png') }}" alt="{{ $related->name }}" style="width:100%; height:100%; object-fit:cover;">
+                                    <a href="/film/{{ $related->id }}"
+                                       class="col d-flex flex-column related-card"
+                                       style="max-width:120px">
+
+                                        <div class="related-poster skeleton">
+                                            <img
+                                                src="{{ $related->poster
+                        ? asset('public/storage/' . $related->poster)
+                        : asset('images/poster-placeholder.png') }}"
+                                                alt="{{ $related->name }}"
+                                                loading="lazy"
+                                                onload="this.parentElement.classList.remove('skeleton')"
+                                            >
                                         </div>
-                                        <p class="text-light mt-2">{{ $related->name }}</p>
-                                        <p class="text-secondary">{{ $related->year }}</p>
+
+                                        <p class="text-light mt-2 text-nowrap mb-0">{{ $related->name }}</p>
+                                        <p class="text-secondary small">{{ $related->year }}</p>
                                     </a>
                                 @endforeach
                             @endif
+
                         </div>
                     </div>
                 </div>
@@ -146,7 +175,8 @@
                     <div class="col-12 mb-3"><p>Trailer & Clips</p></div>
                     @if($film->video)
                         <div class="col-12 mb-3">
-                            <video src="{{ asset('public/storage/videos/' . $film->video) }}" controls style="width:100%; height:auto; border-radius:8px;"></video>
+                            <video src="{{ asset('public/storage/' . $film->video) }}" controls
+                                   style="width:100%; height:auto; border-radius:8px;"></video>
                         </div>
                     @else
                         <p class="text-secondary">No trailer available.</p>
