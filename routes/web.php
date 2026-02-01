@@ -62,12 +62,9 @@ Route::get('/admin/settings', AdminController::class . '@settings')->name('admin
 
 Route::get('/film/{film_id}', FilmController::class . '@index');
 
-Route::post('/film/upload', [FilmController::class, 'upload'])
-    ->name('film.upload');
-Route::put('/films/{film}', [FilmController::class, 'update'])->name('film.update');
-
-
-Route::delete('/films/{id}', [FilmController::class, 'destroy'])->name('films.destroy');
+Route::post('/film/upload', [FilmController::class, 'upload'])->name('film.upload');
+Route::put('/film/{id}', [FilmController::class, 'update'])->name('film.update');
+Route::delete('/film/{id}', [FilmController::class, 'destroy'])->name('film.destroy');
 
 
 
