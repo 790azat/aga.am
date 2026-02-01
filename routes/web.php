@@ -47,6 +47,14 @@ Route::get('/home', [HomeController::class, 'index'])
 Route::get('/admin/dashboard', AdminController::class . '@index')->name('admin.dashboard');
 Route::get('/admin/moderators', AdminController::class . '@moderators')->name('admin.moderators');
 Route::get('/admin/films', AdminController::class . '@films')->name('admin.films');
+
+Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
+Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('category.store');
+Route::put('/admin/categories/{id}', [AdminController::class, 'updateCategory'])->name('category.update');
+Route::delete('/admin/categories/{id}', [AdminController::class, 'destroyCategory'])->name('category.destroy');
+
+
+
 Route::get('/admin/users', AdminController::class . '@users')->name('admin.users');
 Route::get('/admin/cashier', AdminController::class . '@cashier')->name('admin.cashier');
 Route::get('/admin/history', AdminController::class . '@history')->name('admin.history');
@@ -56,6 +64,8 @@ Route::get('/film/{film_id}', FilmController::class . '@index');
 
 Route::post('/film/upload', [FilmController::class, 'upload'])
     ->name('film.upload');
+Route::put('/films/{film}', [FilmController::class, 'update'])->name('film.update');
+
 
 Route::delete('/films/{id}', [FilmController::class, 'destroy'])->name('films.destroy');
 

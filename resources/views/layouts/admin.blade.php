@@ -22,6 +22,13 @@
                 </a>
             </div>
 
+            <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.categories*') ? 'text-light' : 'text-secondary' }}">
+                <a href="{{ route('admin.categories') }}">
+                    <i class="fa-solid fa-tags me-1"></i> Categories
+                </a>
+            </div>
+
+
             <div class="col-8 mx-auto text-nowrap {{ Route::is('admin.users*') ? 'text-light' : 'text-secondary' }}">
                 <a href="{{ route('admin.users') }}">
                     <i class="fa-solid fa-users me-1"></i> Users
