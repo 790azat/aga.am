@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PosterController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -65,6 +66,11 @@ Route::get('/film/{film_id}', FilmController::class . '@index');
 Route::post('/film/upload', [FilmController::class, 'upload'])->name('film.upload');
 Route::put('/film/{id}', [FilmController::class, 'update'])->name('film.update');
 Route::delete('/film/{id}', [FilmController::class, 'destroy'])->name('film.destroy');
+
+Route::prefix('admin')->middleware('auth')->group(function() {
+    Route::post('/make-moderator', [ModeratorController::class, 'makeModerator'])->name('admin.users.makeModerator');
+    Route::post('/remove-moderator', [ModeratorController::class, 'removeModerator'])->name('admin.users.removeModerator');
+});
 
 
 
