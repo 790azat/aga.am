@@ -14,6 +14,12 @@ Route::get('/reset', function () {
     Artisan::call('db:seed');
     return redirect('/');
 });
+
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+});
+
 Route::get('/', PosterController::class . '@index');
 
 Route::get('checkout',  function () {
@@ -70,6 +76,7 @@ Route::delete('/film/{id}', [FilmController::class, 'destroy'])->name('film.dest
 Route::prefix('admin')->middleware('auth')->group(function() {
     Route::post('/make-moderator', [ModeratorController::class, 'makeModerator'])->name('admin.users.makeModerator');
     Route::post('/remove-moderator', [ModeratorController::class, 'removeModerator'])->name('admin.users.removeModerator');
+    Route::post('/change-password', [ModeratorController::class, 'changePassword'])->name('admin.users.changePassword');
 });
 
 

@@ -14,18 +14,41 @@
 
                 <!-- Левая колонка: кнопки, рейтинг -->
                 <div class="col-6 d-flex flex-column justify-content-end gap-3">
-                    <div class="col-12 mb-3">
+                    <div class="col-12">
                         <div style="width: 200px" class="rounded-2 overflow-hidden">
                             <img
                                 src="{{ $film->poster ? asset('public/storage/' . $film->poster) : asset('images/poster-placeholder.png') }}"
                                 style="width: 100%;height: 100%" alt="">
                         </div>
                     </div>
+                    <div class="col-12">
+                        <p class="text-light fw-bold fs-5">{{ $film->name }}</p>
+                    </div>
                     <div class="col-12 d-flex justify-content-start align-items-center gap-3">
-                        <a href="{{ $film->video ? asset('public/storage/' . $film->video) : '#' }}"
-                           class="btn btn-danger rounded-pill my-2 px-4 text-light">
+                        <button
+                            data-bs-toggle="modal" data-bs-target="#filmModal"
+                            class="btn btn-danger rounded-pill my-2 px-4 text-light">
                             <i class="fa-solid fa-play me-1"></i> Watch
-                        </a>
+                        </button>
+
+                        <div class="modal fade" id="filmModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content text-light" style="background-color: #181818">
+
+                                    <div class="modal-header border-0 pb-0">
+                                        <h5 class="modal-title">{{ $film->name }}</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <video src="{{ asset('public/storage/') . '/' . $film->video }}" controls width="100%" height="100%"></video>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class="btn btn-dark rounded-pill my-2 px-4">
                             <i class="fa-solid fa-plus me-1"></i> Add to my playlist
                         </div>
@@ -74,7 +97,7 @@
                             <span style="font-size: 8px"><i class="fa-solid fa-circle"></i></span>
                             2h 44m <!-- можно заменить на $film->duration если есть -->
                             <span style="font-size: 8px"><i class="fa-solid fa-circle"></i></span>
-                            {{ $film->main_genre ?? 'N/A' }}
+                            {{ $film->category->name ?? 'N/A' }}
                         </p>
                     </div>
                     <div class="col-12">
@@ -96,7 +119,10 @@
                             </div>
                             <div class="col-12"><i
                                     class="fa-solid fa-circle-nodes me-1"></i> {{ $film->main_genre ?? 'N/A' }}</div>
-                            <div class="col-12"><i class="fa-solid fa-icons me-1"></i> {{ $film->genres ?? 'N/A' }}
+                            <div class="col-12"><i class="fa-solid fa-icons me-1"></i>
+                                @foreach($film->genres->pluck('name') as $genre)
+                                    {{ $genre }}
+                                @endforeach
                             </div>
                         </div>
                         <div class="col-6"></div>
@@ -187,6 +213,10 @@
         </div>
     </div>
 
+    @include('components.comments')
+
     @include('components.layouts.app.footer')
 
 @endsection
+
+
