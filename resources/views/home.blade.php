@@ -61,47 +61,14 @@
 
         <div class="col-12 py-4" style="background: #1c1c1c">
             <div class="container">
-                <div class="col-12 d-flex">
-                    <div class="col">
-                        <div class="col btn btn-danger rounded-pill py-2 px-5">
-                            Action
+                <div class="col-12 d-flex gap-3">
+                    @foreach($categories as $category)
+                        <div class="col-auto">
+                            <div class="col btn @if($loop->first) btn-danger @else btn-dark @endif rounded-pill py-2 px-5 text-nowrap">
+                                {{ $category->name }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="col btn btn-dark rounded-pill py-2 px-5">
-                            Action
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="col btn btn-dark rounded-pill py-2 px-5">
-                            Action
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="col btn btn-dark rounded-pill py-2 px-5">
-                            Action
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="col btn btn-dark rounded-pill py-2 px-5">
-                            Action
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="col btn btn-dark rounded-pill py-2 px-5">
-                            Action
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="col btn btn-dark rounded-pill py-2 px-5">
-                            Action
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="col btn btn-dark rounded-pill py-2 px-5">
-                            Action
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

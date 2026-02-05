@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Film;
 use App\Models\Videos;
 use Illuminate\Http\Request;
@@ -30,8 +31,9 @@ class HomeController extends Controller
     {
 
         $films = Film::all();
+        $categories = Category::all();
 
-        return view('home', compact('films'));
+        return view('home', compact('films', 'categories'));
 
     }
 }

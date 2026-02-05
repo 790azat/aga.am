@@ -31,9 +31,10 @@
                     @endif
                 @else
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <i class="fa-solid fa-user me-1"></i> {{ Auth::user()->name }}
-                        </a>
+                        <button id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <img src="{{ asset('public/storage/' . Auth::user()->avatar) }}" style="width: 30px;height: 30px" alt="">
+                            <p>{{ Auth::user()->name }}</p>
+                        </button>
 
                         <div class="dropdown-menu dropdown-menu-end bg-dark text-light" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item d-flex justify-content-center" href="{{ route('logout') }}"

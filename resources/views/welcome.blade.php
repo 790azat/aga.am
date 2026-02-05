@@ -56,8 +56,9 @@
         @auth
             <div>
                 <div class="btn btn-outline-light rounded rounded-pill px-3 py-2">
-                    <a href="{{ route('home') }}">
-                        <p>{{ Auth::user()->name }} <i class="fa-solid fa-user ms-1"></i></p>
+                    <a href="{{ route('home') }}" class="d-flex gap-2 align-items-center">
+                        <img src="{{ asset('public/storage/' . Auth::user()->avatar) }}" style="width: 30px;height: 30px" alt="">
+                        <p>{{ Auth::user()->name }}</p>
                     </a>
                 </div>
             </div>

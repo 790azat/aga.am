@@ -213,7 +213,9 @@
         </div>
     </div>
 
-    @include('components.comments')
+
+    <livewire:comments-section :film-id="$film->id" />
+
 
     @include('components.layouts.app.footer')
 
