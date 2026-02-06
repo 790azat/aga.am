@@ -151,6 +151,7 @@ p {
 
 /* hover эффект */
 .actor-avatar:hover {
+    cursor: pointer !important;
     transform: scale(1.08);
     box-shadow: 0 12px 28px rgba(0,0,0,.7);
 }

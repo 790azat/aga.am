@@ -56,7 +56,13 @@
                         <div class="col-auto d-flex gap-2">
                             @for($i=1;$i<=5;$i++)
                                 <div class="col">
-                                    <i class="fa-solid fa-star {{ $i <= floor($film->rating ?? 3) ? 'text-warning' : 'text-secondary' }}"></i>
+                                    @if($film->rating >= $i)
+                                        <i class="fa-solid fa-star text-warning"></i>
+                                    @elseif($film->rating >= $i - 0.5)
+                                        <i class="fa-solid fa-star-half-stroke text-warning"></i>
+                                    @else
+                                        <i class="fa-regular fa-star text-secondary"></i>
+                                    @endif
                                 </div>
                             @endfor
                         </div>
@@ -108,9 +114,9 @@
                             <div class="col-12"><i class="fa-solid fa-user-tie me-1"></i><span
                                     class="fw-bold">Director:</span> {{ $film->director ?? 'N/A' }}</div>
                             @if($film->actors)
-                                @foreach(explode(',', $film->actors) as $actor)
+                                @foreach($film->actors as $actor)
                                     <div class="col-12"><i
-                                            class="fa-solid fa-masks-theater me-1"></i> {{ trim($actor) }}</div>
+                                            class="fa-solid fa-masks-theater me-1"></i> {{ $actor->name }}</div>
                                 @endforeach
                             @endif
                         </div>
@@ -149,18 +155,20 @@
                     <div class="col-12 mb-3"><p>Cast & Crew</p></div>
                     <div class="col-12 d-flex justify-content-start gap-3">
                         @if(!empty($film->actors))
-                            @foreach(array_filter(array_map('trim', explode(',', $film->actors))) as $actor)
-                                <div class="col-auto text-center">
+                            @foreach($film->actors as $actor)
+                                <a href="{{ route('actor.index', $actor->id) }}" class="col-auto text-center">
                                     <div class="actor-avatar skeleton">
                                         <img
-                                            src="{{ asset('images/actor-placeholder.png') }}"
-                                            alt="{{ $actor }}"
+                                            src="{{ asset('public/storage/' . ($actor->avatar ? $actor->avatar : 'actor-placeholder.png')) }}"
+                                            alt="{{ $actor->name }}"
                                             loading="lazy"
                                             onload="this.parentElement.classList.remove('skeleton')"
                                         >
                                     </div>
-                                    <p class="text-light mt-2 mb-0">{{ $actor }}</p>
-                                </div>
+                                    <div style="width: 100px">
+                                        <p class="text-light mt-2 mb-0 text-truncate">{{ $actor->name }}</p>
+                                    </div>
+                                </a>
                             @endforeach
                         @endif
 
