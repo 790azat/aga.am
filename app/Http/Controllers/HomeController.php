@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Film;
 use App\Models\Videos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
@@ -30,9 +31,11 @@ class HomeController extends Controller
     public function index()
     {
 
-        $films = Film::all();
-        $categories = Category::all();
-
+        if (Auth::user()->type == 'admin') {
+            return view('admin.dashboard');
+        } else
+            $films = Film::all();
+            $categories = Category::all();
         return view('home', compact('films', 'categories'));
 
     }

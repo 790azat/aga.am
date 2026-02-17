@@ -6,7 +6,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WCHDCGSMLQ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'G-WCHDCGSMLQ');
@@ -28,24 +32,28 @@
     <link rel="apple-touch-icon" href="{{ asset('images/aga logo.png') }}">
 
     <meta name="title" content="AGA | Interactive Film Financing & Creative Platform">
-    <meta name="description" content="AGA is a digital platform where subscriptions act as votes for film funding. Watch vertical pilot reels, support creators, and become a co-producer. Presented by Andranik Abrahamyan.">
-    <meta name="keywords" content="AGA platform, film financing, Andranik Abrahamyan, vertical video, creative industry, audience voting, movie production, co-producer, pilot reels, Armenian startup">
+    <meta name="description"
+          content="AGA is a digital platform where subscriptions act as votes for film funding. Watch vertical pilot reels, support creators, and become a co-producer. Presented by Andranik Abrahamyan.">
+    <meta name="keywords"
+          content="AGA platform, film financing, Andranik Abrahamyan, vertical video, creative industry, audience voting, movie production, co-producer, pilot reels, Armenian startup">
     <meta name="author" content="Andranik Abrahamyan">
     <meta name="robots" content="index, follow">
 
-    <link rel="canonical" href="{{ url()->current() }}" />
+    <link rel="canonical" href="{{ url()->current() }}"/>
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aga.am/">
     <meta property="og:title" content="AGA | Interactive Film Financing & Creative Platform">
-    <meta property="og:description" content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote for production funding via subscriptions.">
+    <meta property="og:description"
+          content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote for production funding via subscriptions.">
     <meta property="og:image" content="{{ asset('images/meta.png') }}">
     <meta property="og:site_name" content="AGA">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://aga.am/">
     <meta name="twitter:title" content="AGA | Interactive Film Financing & Creative Platform">
-    <meta name="twitter:description" content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote.">
+    <meta name="twitter:description"
+          content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote.">
     <meta name="twitter:image" content="{{ asset('images/meta.png') }}">
 
 </head>
@@ -57,7 +65,8 @@
             <div>
                 <div class="btn btn-outline-light rounded rounded-pill px-3 py-2">
                     <a href="{{ route('home') }}" class="d-flex gap-2 align-items-center">
-                        <img src="{{ asset('public/storage/' . Auth::user()->avatar) }}" style="width: 30px;height: 30px" alt="">
+                        <img src="{{ asset('public/storage/' . Auth::user()->avatar) }}"
+                             style="width: 30px;height: 30px" alt="">
                         <p>{{ Auth::user()->name }}</p>
                     </a>
                 </div>
@@ -99,11 +108,16 @@
                     <img src="https://static-v1.mydramawave.com/frontend_static/assets/app-store-BVsC4YpI.webp" alt=""
                          style="width: 100%">
                 </a>
-                <div class="col-12 d-flex justify-content-center">
+                <div class="col-12 d-flex flex-column justify-content-center">
                     <div class="col-8 mx-auto btn btn-outline-light rounded rounded-pill py-3 mt-3">
                         <a href="{{ route('home') }}">
                             <p class="text-nowrap"><i class="fa-solid fa-globe me-2"></i> Browser version</p>
                         </a>
+                    </div>
+                    <div class="col-12 d-flex justify-content-center text-light align-items-center mt-3">
+                        <p>Active users </p>
+                        <i class="fa-solid fa-users mx-2"></i>
+                        <div class="counter" data-target=" {{ 1000 + \Illuminate\Support\Carbon::now()->dayOfYear }}"></div>
                     </div>
                 </div>
             </div>
@@ -112,7 +126,7 @@
             <div class="row row-cols-3">
                 @foreach($posters as $poster)
                     <div class="col mb-3">
-                        <img src="{{ asset('images/' . $poster->img . '.webp') }}" class="rounded-3" style="width: 100%"
+                        <img src="{{ asset('public/storage/' . $poster) }}" class="rounded-3" style="width: 100%"
                              alt="">
                     </div>
                 @endforeach
@@ -120,6 +134,32 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    const counters = document.querySelectorAll(".counter");
+
+    counters.forEach(counter => {
+        counter.innerText = "0";
+
+        const updateCounter = () => {
+            const target = +counter.getAttribute("data-target");
+            const current = +counter.innerText;
+
+            const increment = target / 200;
+
+            if (current < target) {
+                counter.innerText = Math.ceil(current + increment).toLocaleString();
+                setTimeout(updateCounter, 10);
+            } else {
+                counter.innerText = target.toLocaleString();
+            }
+        };
+
+        updateCounter();
+    });
+</script>
+
 
 @include('components.layouts.app.footer')
 </body>
