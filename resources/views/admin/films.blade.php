@@ -290,7 +290,9 @@
                             </td>
                             <td>{{ $film->producer ?: '—' }}</td>
                             <td>{{ $film->director ?: '—' }}</td>
-                            <td>{{ $film->actors ?: '—' }}</td>
+                            <td>
+                                {{ $film->actors?->pluck('name')->implode(', ') ?? 'No actors' }}
+                            </td>
                             <td>
                                 @if($film->background)
                                     <img src="{{ asset('storage/'.$film->background) }}" style="max-height:40px" class="rounded">
@@ -326,7 +328,7 @@
                                             data-genres="{{ $film->genres->pluck('id')->join(',') }}"
                                             data-producer="{{ $film->producer }}"
                                             data-director="{{ $film->director }}"
-                                            data-actors="{{ $film->actors }}"
+                                            data-actors="{{ $film->actors?->pluck('name')->implode(', ') ?? 'No actors' }}"
                                             data-year="{{ $film->year }}"
                                             data-bs-toggle="modal"
                                             data-bs-target="#editFilmModal">
@@ -400,7 +402,7 @@
                                         </p>
                                         <p><strong>Producer:</strong> {{ $film->producer ?: '—' }}</p>
                                         <p><strong>Director:</strong> {{ $film->director ?: '—' }}</p>
-                                        <p><strong>Actors:</strong> {{ $film->actors ?: '—' }}</p>
+                                        <p><strong>Actors:</strong> {{ $film->actors?->pluck('name')->implode(', ') ?? 'No actors' }}</p>
                                         <p><strong>Year:</strong> {{ $film->year ?: '—' }}</p>
                                         <p><strong>Video:</strong> {{ $film->video ? 'Yes' : '—' }}</p>
                                         <p><strong>Created at:</strong>
