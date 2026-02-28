@@ -1,5 +1,5 @@
 <div>
-    <div class="col-2 mx-auto d-flex justify-content-center align-items-center">
+    <div class="col-2 mx-auto py-3 d-flex justify-content-center align-items-center">
         <div class="dropdown w-100">
             <div class="input-group">
         <span class="input-group-text">

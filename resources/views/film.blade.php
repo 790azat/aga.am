@@ -37,11 +37,13 @@
 
                                     <div class="modal-header border-0 pb-0">
                                         <h5 class="modal-title">{{ $film->name }}</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                        <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal"></button>
                                     </div>
 
                                     <div class="modal-body">
-                                        <video src="{{ asset('public/storage/') . '/' . $film->video }}" controls width="100%" height="100%"></video>
+                                        <video src="{{ asset('public/storage/') . '/' . $film->video }}" controls
+                                               width="100%" height="100%"></video>
                                     </div>
 
                                 </div>
@@ -159,8 +161,9 @@
                                 <a href="{{ route('actor.index', $actor->id) }}" class="col-auto text-center">
                                     <div class="actor-avatar skeleton">
                                         <img
-                                            src="{{ asset('public/storage/' . ($actor->avatar ? $actor->avatar : 'actor-placeholder.png')) }}"
-                                            alt="{{ $actor->name }}"
+                                            src="{{ $actor->avatar
+                                            ? asset('storage/' . $actor->avatar)
+                                            : asset('images/actor-placeholder.png') }}" alt="{{ $actor->name }}"
                                             loading="lazy"
                                             onload="this.parentElement.classList.remove('skeleton')"
                                         >
@@ -222,7 +225,7 @@
     </div>
 
 
-    <livewire:comments-section :film-id="$film->id" />
+    <livewire:comments-section :film-id="$film->id"/>
 
 
     @include('components.layouts.app.footer')
