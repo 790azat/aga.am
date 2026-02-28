@@ -155,7 +155,7 @@
                 <!-- Левая колонка: Cast & Crew -->
                 <div class="col-7">
                     <div class="col-12 mb-3"><p>Cast & Crew</p></div>
-                    <div class="col-12 d-flex justify-content-start gap-3">
+                    <div class="col-12 d-flex justify-content-start gap-3 overflow-hidden">
                         @if(!empty($film->actors))
                             @foreach($film->actors as $actor)
                                 <a href="{{ route('actor.index', $actor->id) }}" class="col-auto text-center">

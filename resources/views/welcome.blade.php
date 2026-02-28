@@ -2,28 +2,19 @@
 <html lang="en">
 <head>
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Google tag -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WCHDCGSMLQ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
+        function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-WCHDCGSMLQ');
     </script>
 
-
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <title>AGA | Interactive Film Financing & Creative Platform</title>
@@ -31,111 +22,111 @@
     <link rel="shortcut icon" href="{{ asset('images/aga logo.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('images/aga logo.png') }}">
 
-    <meta name="title" content="AGA | Interactive Film Financing & Creative Platform">
-    <meta name="description"
-          content="AGA is a digital platform where subscriptions act as votes for film funding. Watch vertical pilot reels, support creators, and become a co-producer. Presented by Andranik Abrahamyan.">
-    <meta name="keywords"
-          content="AGA platform, film financing, Andranik Abrahamyan, vertical video, creative industry, audience voting, movie production, co-producer, pilot reels, Armenian startup">
-    <meta name="author" content="Andranik Abrahamyan">
-    <meta name="robots" content="index, follow">
-
-    <link rel="canonical" href="{{ url()->current() }}"/>
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aga.am/">
-    <meta property="og:title" content="AGA | Interactive Film Financing & Creative Platform">
-    <meta property="og:description"
-          content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote for production funding via subscriptions.">
-    <meta property="og:image" content="{{ asset('images/meta.png') }}">
-    <meta property="og:site_name" content="AGA">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://aga.am/">
-    <meta name="twitter:title" content="AGA | Interactive Film Financing & Creative Platform">
-    <meta name="twitter:description"
-          content="Discover and fund the next big film project. On AGA, creators showcase pilot reels and audiences vote.">
-    <meta name="twitter:image" content="{{ asset('images/meta.png') }}">
-
 </head>
-<body style="background: #181818">
 
-<div class="col-12 container pt-5 d-flex justify-content-end">
-    <div class="col-3 d-flex gap-3 justify-content-end">
+<body style="background:#181818;">
+
+<!-- TOP BAR -->
+<div class="container pt-4">
+    <div class="d-flex justify-content-end flex-wrap gap-2 text-light">
+
         @auth
-            <div>
-                <div class="btn btn-outline-light rounded rounded-pill px-3 py-2">
-                    <a href="{{ route('home') }}" class="d-flex gap-2 align-items-center">
-                        <img src="{{ asset('public/storage/' . Auth::user()->avatar) }}"
-                             style="width: 30px;height: 30px" alt="">
-                        <p>{{ Auth::user()->name }}</p>
-                    </a>
-                </div>
-            </div>
+            <a href="{{ route('home') }}"
+               class="btn btn-outline-light rounded-pill d-flex align-items-center gap-2 px-3 py-2">
+                <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                     style="width:30px;height:30px;object-fit:cover;border-radius:50%" alt="">
+                <span class="text-light">{{ Auth::user()->name }}</span>
+            </a>
         @else
-            <div class="btn btn-outline-light rounded rounded-pill px-3 py-2">
-                <a href="{{ route('login') }}">
-                    <p>Login <i class="fa-solid fa-user ms-1"></i></p>
-                </a>
-            </div>
-            <div class="btn btn-outline-light rounded rounded-pill px-3 py-2">
-                <a href="{{ route('register') }}">
-                    <p>Register <i class="fa-solid fa-key ms-1"></i></p>
-                </a>
-            </div>
+            <a href="{{ route('login') }}"
+               class="btn btn-outline-light rounded-pill px-3">
+                Login <i class="fa-solid fa-user ms-1"></i>
+            </a>
+
+            <a href="{{ route('register') }}"
+               class="btn btn-outline-light rounded-pill px-3">
+                Register <i class="fa-solid fa-key ms-1"></i>
+            </a>
         @endauth
+
     </div>
 </div>
 
-<div class="col-12">
-    <div class="container d-flex justify-content-center align-items-start pt-5">
-        <div class="col-6">
-            <div class="col-8 me-auto mt-5 d-flex justify-content-center align-items-end">
-                <img src="{{ asset('images/aga logo.png') }}" style="width: 200px" alt="">
-                <p class="text-light fw-bold" style="font-size: 100px">ga</p>
+
+<!-- MAIN SECTION -->
+<div class="container py-5">
+    <div class="row align-items-center">
+
+        <!-- LEFT SIDE -->
+        <div class="col-12 col-lg-6 text-center text-lg-start mb-5 mb-lg-0">
+
+            <!-- LOGO -->
+            <div class="d-flex justify-content-center align-items-end">
+                <img src="{{ asset('images/aga logo.png') }}"
+                     class="img-fluid"
+                     style="max-width:120px"
+                     alt="AGA logo">
+                <span class="text-light fw-bold display-1 ms-2">ga</span>
             </div>
-            <div class="col-8 me-auto my-5 d-flex align-items-end">
-                <p class="text-light text-center" style="font-size: 30px">
-                    AGA is an interactive digital platform for film and creative industry
-                    professionals and emerging creators.
-                </p>
-            </div>
-            <div class="col-8 me-auto d-flex flex-wrap gap-3 mt-5">
-                <a href="/" class="col">
-                    <img src="https://static-v1.mydramawave.com/frontend_static/assets/google-play-DFvvQRWM.webp" alt=""
-                         style="width: 100%">
+
+            <!-- DESCRIPTION -->
+            <p class="text-light fs-4 mt-4">
+                AGA is an interactive digital platform for film and creative industry
+                professionals and emerging creators.
+            </p>
+
+            <!-- STORE BUTTONS -->
+            <div class="d-flex flex-column flex-sm-row col-8 mx-auto gap-3 mt-4 justify-content-center justify-content-lg-start">
+                <a href="/" class="flex-fill">
+                    <img src="https://static-v1.mydramawave.com/frontend_static/assets/google-play-DFvvQRWM.webp"
+                         class="img-fluid"
+                         alt="Google Play">
                 </a>
-                <a href="/" class="col">
-                    <img src="https://static-v1.mydramawave.com/frontend_static/assets/app-store-BVsC4YpI.webp" alt=""
-                         style="width: 100%">
+                <a href="/" class="flex-fill">
+                    <img src="https://static-v1.mydramawave.com/frontend_static/assets/app-store-BVsC4YpI.webp"
+                         class="img-fluid"
+                         alt="App Store">
                 </a>
-                <div class="col-12 d-flex flex-column justify-content-center">
-                    <div class="col-8 mx-auto btn btn-outline-light rounded rounded-pill py-3 mt-3">
-                        <a href="{{ route('home') }}">
-                            <p class="text-nowrap"><i class="fa-solid fa-globe me-2"></i> Browser version</p>
-                        </a>
-                    </div>
-                    <div class="col-12 d-flex justify-content-center text-light align-items-center mt-3">
-                        <p>Active users </p>
-                        <i class="fa-solid fa-users mx-2"></i>
-                        <div class="counter" data-target=" {{ 1000 + \Illuminate\Support\Carbon::now()->dayOfYear }}"></div>
-                    </div>
-                </div>
             </div>
+
+            <!-- BROWSER BUTTON -->
+            <div class="mt-4 text-center">
+                <a href="{{ route('home') }}"
+                   class="btn btn-outline-light rounded-pill px-4 py-3 text-light">
+                    <i class="fa-solid fa-globe me-2"></i> Browser version
+                </a>
+            </div>
+
+            <!-- USERS COUNTER -->
+            <div class="d-flex justify-content-center align-items-center text-light mt-4">
+                <span>Active users</span>
+                <i class="fa-solid fa-users mx-2"></i>
+                <span class="counter"
+                      data-target="{{ 1000 + \Illuminate\Support\Carbon::now()->dayOfYear }}"></span>
+            </div>
+
         </div>
-        <div class="col-6">
-            <div class="row row-cols-3">
+
+
+        <!-- RIGHT SIDE (POSTERS GRID) -->
+        <div class="col-12 col-lg-6">
+            <div class="row row-cols-2 row-cols-sm-3 g-3">
                 @foreach($posters as $poster)
-                    <div class="col mb-3">
-                        <img src="{{ asset('public/storage/' . $poster) }}" class="rounded-3" style="width: 100%"
-                             alt="">
+                    <div class="col">
+                        <img src="{{ asset('storage/' . $poster) }}"
+                             class="img-fluid rounded-3"
+                             style="object-fit:cover"
+                             alt="Poster">
                     </div>
                 @endforeach
             </div>
         </div>
+
     </div>
 </div>
 
 
+<!-- COUNTER SCRIPT -->
 <script>
     const counters = document.querySelectorAll(".counter");
 
@@ -144,7 +135,7 @@
 
         const updateCounter = () => {
             const target = +counter.getAttribute("data-target");
-            const current = +counter.innerText;
+            const current = +counter.innerText.replace(/,/g,'');
 
             const increment = target / 200;
 
@@ -160,11 +151,7 @@
     });
 </script>
 
-
 @include('components.layouts.app.footer')
+
 </body>
 </html>
-
-
-
-

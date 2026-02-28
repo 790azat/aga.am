@@ -1,7 +1,7 @@
 <div>
-    <div class="col-2 mx-auto py-3 d-flex justify-content-center align-items-center">
+    <div class="col-10 col-sm-8 col-md-6 col-lg-3  mx-auto py-3 d-flex justify-content-center align-items-center">
         <div class="dropdown w-100">
-            <div class="input-group">
+            <div class="input-group d-flex flex-nowrap">
         <span class="input-group-text">
             <i class="fa fa-search"></i>
         </span>
