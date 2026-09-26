@@ -13,18 +13,6 @@ use Laravel\Fortify\Features;
 use Laravel\Socialite\Facades\Socialite;
 
 
-Route::get('/reset', function () {
-    Artisan::call('migrate:fresh');
-    Artisan::call('db:seed');
-    return redirect('/');
-});
-
-Route::get('/logout', function () {
-    Auth::logout();
-    return redirect('/');
-});
-
-
 Auth::routes();
 
 Route::get('/', PosterController::class . '@index');

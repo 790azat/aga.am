@@ -23,6 +23,11 @@ class CommentsSection extends Component
 
     public function send()
     {
+        // Комментировать могут только авторизованные пользователи
+        if (! Auth::check()) {
+            return $this->redirect(route('login'));
+        }
+
         $this->validate([
             'text' => 'required|min:2',
         ]);
