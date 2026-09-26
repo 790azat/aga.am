@@ -6,7 +6,7 @@ Laravel на Vercel работает через community-runtime [vercel-php](h
 ## 1. База данных (Postgres)
 
 В Vercel откройте **Storage → Create Database → Neon (Postgres)** и подключите базу к проекту.
-Скопируйте строку подключения (`DATABASE_URL`).
+Vercel сам добавит переменную `DATABASE_URL`, и сайт подхватит её автоматически, `DB_CONNECTION` и `DB_URL` задавать не нужно.
 
 ## 2. Хранилище файлов (Cloudflare R2)
 
@@ -25,8 +25,6 @@ Laravel на Vercel работает через community-runtime [vercel-php](h
 | --- | --- |
 | `APP_KEY` | вывод `php artisan key:generate --show` |
 | `APP_URL` | `https://<ваш-домен>` |
-| `DB_CONNECTION` | `pgsql` |
-| `DB_URL` | строка подключения Neon |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | ключи R2 |
 | `AWS_BUCKET` | имя бакета |
 | `AWS_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` |
