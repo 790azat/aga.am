@@ -40,6 +40,25 @@ foreach ($defaults as $key => $value) {
     }
 }
 
+/*
+ * PHP на Vercel собран со старым libpq 13 без SNI, и Neon не может определить endpoint
+ * ("Endpoint ID is not specified"). Обходной путь из документации Neon: передать endpoint
+ * в пароле в виде "endpoint=<id>$<пароль>".
+ */
+foreach (['DB_URL', 'DATABASE_URL'] as $key) {
+    $url = getenv($key);
+    $parts = $url ? parse_url($url) : false;
+    if (! $parts || ! str_ends_with($parts['host'] ?? '', '.neon.tech') || ! isset($parts['pass'])
+        || str_starts_with(rawurldecode($parts['pass']), 'endpoint=')) {
+        continue;
+    }
+    $endpoint = preg_replace('/-pooler$/', '', explode('.', $parts['host'])[0]);
+    $password = rawurlencode('endpoint='.$endpoint.'$'.rawurldecode($parts['pass']));
+    $url = preg_replace('#^([a-z]+://[^:/@]+:)[^@]*@#i', '${1}'.$password.'@', $url, 1);
+    putenv("{$key}={$url}");
+    $_ENV[$key] = $_SERVER[$key] = $url;
+}
+
 // Логи только в stderr: их видно во вкладке Logs на Vercel (файлы в /tmp никто не прочитает).
 putenv('LOG_CHANNEL=stderr');
 $_ENV['LOG_CHANNEL'] = $_SERVER['LOG_CHANNEL'] = 'stderr';
