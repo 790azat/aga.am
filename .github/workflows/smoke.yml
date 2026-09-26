@@ -35,4 +35,12 @@ jobs:
             case "$url" in https://*) ;; *) echo "   not https"; fail=1;; esac
             [ "$code" = "200" ] || fail=1
           done
+          # Картинки (постеры и т.п.) с главной и страницы фильма: после редиректов должны отдаваться с кодом 200.
+          curl -s "$SITE/film/1" -o film.html
+          for url in $(cat home.html film.html | grep -oE 'src="[^"]*/(media|storage|images)/[^"]+"' | sed -E 's/^src="//; s/"$//' | sort -u | head -20); do
+            case "$url" in /*) url="$SITE$url";; esac
+            code=$(curl -sL -o /dev/null -w '%{http_code} %{content_type}' "$url")
+            echo "== image $url -> $code"
+            case "$code" in 200*) ;; *) fail=1;; esac
+          done
           exit $fail

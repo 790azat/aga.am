@@ -15,6 +15,14 @@ class MediaController extends Controller
     // Ответ функции Vercel не может быть больше 4.5 МБ, поэтому видео отдаётся кусками.
     private const MAX_CHUNK = 4 * 1024 * 1024;
 
+    // Заглушки для файлов, которых ещё нет в хранилище (например, не перенесённых со старого хостинга).
+    private const PLACEHOLDERS = [
+        'posters' => 'images/poster-placeholder.png',
+        'backgrounds' => 'images/background-placeholder.png',
+        'logos' => 'images/logo-placeholder.png',
+        'avatars' => 'images/actor-placeholder.png',
+    ];
+
     public function __invoke(Request $request, string $path)
     {
         $adapter = Storage::disk('public')->getAdapter();
@@ -22,6 +30,10 @@ class MediaController extends Controller
         abort_if(str_contains($path, '..'), 404);
 
         $blob = $adapter->fetch($path, $this->range($request->header('Range')));
+
+        if ($blob->status() === 404 && $placeholder = self::PLACEHOLDERS[strstr($path, '/', true)] ?? null) {
+            return redirect(asset($placeholder))->header('Cache-Control', 'public, max-age=300');
+        }
 
         abort_unless(in_array($blob->status(), [200, 206], true), $blob->status() === 416 ? 416 : 404);
 

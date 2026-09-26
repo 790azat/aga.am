@@ -60,6 +60,21 @@ class VercelBlobDiskTest extends TestCase
             && $r->hasHeader('Range', 'bytes=0-4194303'));
     }
 
+    public function test_missing_poster_redirects_to_placeholder(): void
+    {
+        config(['filesystems.disks.public' => [
+            'driver' => 'vercel-blob',
+            'token' => self::TOKEN,
+            'access' => 'private',
+            'media_url' => '/media',
+        ]]);
+        Storage::forgetDisk('public');
+        Http::fake(['*' => Http::response('', 404)]);
+
+        $this->get('/media/posters/none.jpg')->assertRedirect(asset('images/poster-placeholder.png'));
+        $this->get('/media/videos/none.mp4')->assertNotFound();
+    }
+
     public function test_media_route_is_404_without_blob(): void
     {
         $this->get('/media/posters/a.jpg')->assertNotFound();
