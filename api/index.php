@@ -20,7 +20,8 @@ $defaults = [
     'SESSION_DRIVER' => 'cookie',
     'CACHE_STORE' => 'database',
     'QUEUE_CONNECTION' => 'sync',
-    'PUBLIC_DISK_DRIVER' => 's3',
+    // Медиа в R2/S3, только если бакет настроен; иначе сайт падал бы на любой странице с постерами.
+    'PUBLIC_DISK_DRIVER' => getenv('AWS_BUCKET') ? 's3' : 'local',
 ];
 
 foreach ($defaults as $key => $value) {
