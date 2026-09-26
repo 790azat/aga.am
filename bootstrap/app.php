@@ -17,5 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // На Vercel дублируем ошибки напрямую в stderr, даже если сам логгер Laravel не сработал.
+        $exceptions->report(function (Throwable $e) {
+            if (getenv('VERCEL')) {
+                for ($ex = $e; $ex; $ex = $ex->getPrevious()) {
+                    error_log(get_class($ex).': '.$ex->getMessage().' at '.$ex->getFile().':'.$ex->getLine());
+                }
+            }
+        });
     })->create();
