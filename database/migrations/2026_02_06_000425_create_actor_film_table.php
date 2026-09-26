@@ -19,8 +19,6 @@ return new class extends Migration
             $table->foreign('film_id')->references('id')->on('film')->onDelete('cascade'); // ← use 'film' not 'films'
         });
 
-
-
     }
 
     public function down(): void

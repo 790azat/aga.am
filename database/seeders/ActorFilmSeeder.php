@@ -3,12 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ActorFilmSeeder extends Seeder
 {
-    public function run(): void
-    {
-
-    }
+    public function run(): void {}
 }

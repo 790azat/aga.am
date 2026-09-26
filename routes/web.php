@@ -10,15 +10,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
-
 Auth::routes();
 
-Route::get('/', PosterController::class . '@index');
+Route::get('/', PosterController::class.'@index');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/film/{film_id}', [FilmController::class, 'index']);
-Route::get('/actor/{id}', ActorController::class . '@index')->name('actor.index');
-
-
+Route::get('/actor/{id}', ActorController::class.'@index')->name('actor.index');
 
 // FILM (админ и модератор)
 Route::middleware('admin:admin,moderator')->group(function () {
@@ -28,7 +25,6 @@ Route::middleware('admin:admin,moderator')->group(function () {
     Route::delete('/film/{film}', [FilmController::class, 'destroy'])->name('film.destroy');
 
 });
-
 
 // ADMIN PANEL (доступ админ/модератор)
 Route::prefix('admin')
@@ -48,7 +44,6 @@ Route::prefix('admin')
         Route::get('/history', [AdminController::class, 'history'])->name('admin.history');
         Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
     });
-
 
 // ONLY ADMIN (управление модераторами)
 Route::prefix('admin')
@@ -72,7 +67,7 @@ Route::get('/auth/google/callback', function () {
     $googleUser = Socialite::driver('google')->user();
 
     $avatarUrl = str_replace('s96-c', 's512-c', $googleUser->getAvatar());
-    $avatarPath = 'avatars/' . $googleUser->getId() . '.png';
+    $avatarPath = 'avatars/'.$googleUser->getId().'.png';
 
     // скачать аватар
     $avatar = Http::get($avatarUrl)->body();
@@ -82,7 +77,7 @@ Route::get('/auth/google/callback', function () {
 
     $user = User::where('email', $googleUser->email)->first();
 
-    if (!$user) {
+    if (! $user) {
 
         $user = User::create([
             'name' => explode(' ', $googleUser->name)[0],
@@ -94,7 +89,7 @@ Route::get('/auth/google/callback', function () {
 
     } else {
 
-        if (!$user->google_id) {
+        if (! $user->google_id) {
             $user->google_id = $googleUser->getId();
         }
 
@@ -107,9 +102,3 @@ Route::get('/auth/google/callback', function () {
 
     return redirect('/home');
 });
-
-
-
-
-
-

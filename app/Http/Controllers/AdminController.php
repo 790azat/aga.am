@@ -6,9 +6,6 @@ use App\Models\Category;
 use App\Models\Film;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
-
-
 
 class AdminController extends Controller
 {
@@ -17,7 +14,6 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
-
     public function films()
     {
         // Получаем все фильмы и категории
@@ -25,28 +21,35 @@ class AdminController extends Controller
         $categories = Category::all();
         $allCategories = Category::all()->pluck('name', 'id'); // [id => name]
 
-        return view('admin.films', ['films' => $films, 'categories' => $categories,'allCategories' => $allCategories]);
+        return view('admin.films', ['films' => $films, 'categories' => $categories, 'allCategories' => $allCategories]);
     }
 
-    public function users() {
+    public function users()
+    {
         $users = User::all();
+
         return view('admin.users', compact('users'));
     }
 
-    public function cashier() {
+    public function cashier()
+    {
         return view('admin.cashier');
     }
 
-    public function history() {
+    public function history()
+    {
         return view('admin.history');
     }
 
-    public function settings() {
+    public function settings()
+    {
         return view('admin.settings');
     }
 
-    public function moderators() {
+    public function moderators()
+    {
         $users = User::where('type', 'moderator')->get();
+
         return view('admin.moderators', compact('users'));
     }
 
@@ -54,6 +57,7 @@ class AdminController extends Controller
     public function categories()
     {
         $categories = Category::all();
+
         return view('admin.categories', compact('categories'));
     }
 
@@ -98,6 +102,7 @@ class AdminController extends Controller
         }
 
         $category->delete();
+
         return back()->with('success', 'Категория успешно удалена');
     }
 }

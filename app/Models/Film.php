@@ -11,7 +11,6 @@ class Film extends Model
 
     protected $fillable = ['name', 'category_id', 'genres', 'year', 'director', 'producer', 'poster', 'background', 'logo', 'video', 'description', 'rating'];
 
-
     protected $casts = [
         'genres' => 'array',
     ];
@@ -38,6 +37,4 @@ class Film extends Model
         return $this->belongsToMany(Actor::class, 'actor_film', 'film_id', 'actor_id')
             ->withTimestamps();
     }
-
-
 }

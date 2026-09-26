@@ -2,13 +2,14 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class CommentsSection extends Component
 {
     public $filmId;
+
     public $text = '';
 
     public function mount($filmId)

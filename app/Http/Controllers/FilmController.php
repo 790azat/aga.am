@@ -89,19 +89,19 @@ class FilmController extends Controller
     private function validateData(Request $request)
     {
         return $request->validate([
-            'name'       => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'category_id' => 'nullable|integer|exists:categories,id',
-            'year'       => 'nullable|integer',
-            'actors'     => 'nullable|string',
-            'director'   => 'nullable|string',
-            'producer'   => 'nullable|string',
-            'added_genres'   => 'nullable|array',
+            'year' => 'nullable|integer',
+            'actors' => 'nullable|string',
+            'director' => 'nullable|string',
+            'producer' => 'nullable|string',
+            'added_genres' => 'nullable|array',
             'added_genres.*' => 'integer|exists:categories,id',
 
-            'poster'     => 'nullable|image|max:10240',
+            'poster' => 'nullable|image|max:10240',
             'background' => 'nullable|image|max:10240',
-            'logo'       => 'nullable|image|max:10240',
-            'video'      => 'nullable|mimes:mp4,mov,avi,webm|max:512000',
+            'logo' => 'nullable|image|max:10240',
+            'video' => 'nullable|mimes:mp4,mov,avi,webm|max:512000',
         ]);
     }
 

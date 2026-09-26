@@ -2,9 +2,9 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Category;
 use App\Models\Film;
+use Livewire\Component;
 
 class HomeFilms extends Component
 {
