@@ -13,7 +13,7 @@
                         <!-- LEFT IMAGE (VISIBLE ONLY DESKTOP) -->
                         <div class="col-lg-5 d-none d-lg-block">
                             <div style="
-                            background: url('{{ asset('auth-images/login-image.jpg') }}');
+                            background: url('{{ asset('auth-images/login-image.webp') }}');
                             background-size: cover;
                             background-position: center;
                             min-height: 600px;

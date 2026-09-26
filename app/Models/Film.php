@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class Film extends Model
 {
@@ -11,15 +12,27 @@ class Film extends Model
 
     protected $fillable = ['name', 'category_id', 'genres', 'year', 'director', 'producer', 'poster', 'background', 'logo', 'video', 'description', 'rating'];
 
+    /** @var array<string, Collection> */
+    protected array $genresCache = [];
+
     protected $casts = [
         'genres' => 'array',
     ];
 
+    /**
+     * Жанры фильма (категории по id из JSON-поля genres).
+     * Результат кэшируется в модели, чтобы не делать запрос при каждом обращении.
+     */
     public function getGenresAttribute($value)
     {
-        $ids = json_decode($value, true) ?? [];
+        $ids = json_decode($value ?? '[]', true) ?? [];
+        $key = implode(',', $ids);
 
-        return Category::whereIn('id', $ids)->get();
+        if (! isset($this->genresCache[$key])) {
+            $this->genresCache = [$key => Category::whereIn('id', $ids)->get()];
+        }
+
+        return $this->genresCache[$key];
     }
 
     public function category()

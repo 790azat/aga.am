@@ -17,9 +17,9 @@ class AdminController extends Controller
     public function films()
     {
         // Получаем все фильмы и категории
-        $films = Film::all();
+        $films = Film::with(['actors', 'category'])->latest()->get();
         $categories = Category::all();
-        $allCategories = Category::all()->pluck('name', 'id'); // [id => name]
+        $allCategories = $categories->pluck('name', 'id'); // [id => name]
 
         return view('admin.films', ['films' => $films, 'categories' => $categories, 'allCategories' => $allCategories]);
     }

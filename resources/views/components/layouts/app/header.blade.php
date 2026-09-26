@@ -1,8 +1,8 @@
 <nav id="navbar" class="navbar navbar-expand-md navbar-dark bg-dark text-light shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('images/aga logo.png') }}" style="width: 36px" alt="">
-            {{ config('app.name', 'Laravel') }}
+            <img src="{{ asset('images/aga-logo.webp') }}" style="width: 36px" alt="">
+            {{ config('app.name', 'Aga') }}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>

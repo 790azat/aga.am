@@ -13,7 +13,7 @@
                             <div class="card-body p-4">
 
                                 <div class="d-flex align-items-start gap-3">
-                                    <img
+                                    <img loading="lazy"
                                         src="{{ storage_url(Auth::user()->avatar) }}"
                                         class="rounded-circle"
                                         width="65"
@@ -81,7 +81,7 @@
 
                         @foreach($comments as $comment)
                             <div class="d-flex gap-3 mb-4">
-                                <img
+                                <img loading="lazy"
                                     src="{{ storage_url($comment->user->avatar) }}"
                                     class="rounded-circle"
                                     width="65"
