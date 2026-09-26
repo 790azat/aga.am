@@ -21,7 +21,7 @@ $defaults = [
     'CACHE_STORE' => 'database',
     'QUEUE_CONNECTION' => 'sync',
     // Медиа в R2/S3, только если бакет настроен; иначе сайт падал бы на любой странице с постерами.
-    'PUBLIC_DISK_DRIVER' => getenv('AWS_BUCKET') ? 's3' : 'local',
+    'PUBLIC_DISK_DRIVER' => getenv('BLOB_READ_WRITE_TOKEN') ? 'blob' : (getenv('AWS_BUCKET') ? 's3' : 'local'),
 ];
 
 // Пустые переменные в Vercel считаем незаданными: иначе Laravel получает '' вместо значения

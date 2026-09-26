@@ -8,13 +8,17 @@ Laravel на Vercel работает через community-runtime [vercel-php](h
 В Vercel откройте **Storage → Create Database → Neon (Postgres)** и подключите базу к проекту.
 Vercel сам добавит переменную `DATABASE_URL`, и сайт подхватит её автоматически, `DB_CONNECTION` и `DB_URL` задавать не нужно.
 
-## 2. Хранилище файлов (Cloudflare R2)
+## 2. Хранилище файлов (Vercel Blob)
 
-Постеры, видео и аватары загружаются в S3-совместимый бакет. Бесплатный вариант — Cloudflare R2:
-создайте бакет, включите публичный доступ (r2.dev или свой домен) и API-токен с правами Object Read & Write.
+Постеры, видео и аватары хранятся в Vercel Blob: в проекте на Vercel откройте **Storage → Create Database → Blob**
+и подключите хранилище к проекту. Vercel сам добавит `BLOB_READ_WRITE_TOKEN`, и сайт начнёт использовать Blob
+после следующего деплоя. Ничего больше настраивать не нужно.
+
+Вместо Blob можно использовать S3-совместимый бакет (например, Cloudflare R2): задайте переменные `AWS_*` из таблицы ниже.
+Если заданы обе, используется Blob.
 
 Старые файлы из `storage/app/public` (папки `posters`, `backgrounds`, `logos`, `videos`, `avatars`) нужно один раз
-загрузить в бакет с теми же путями.
+загрузить в хранилище с теми же путями.
 
 ## 3. Проект на Vercel
 
@@ -25,7 +29,7 @@ Vercel сам добавит переменную `DATABASE_URL`, и сайт п
 | --- | --- |
 | `APP_KEY` | вывод `php artisan key:generate --show` |
 | `APP_URL` | `https://<ваш-домен>` |
-| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | ключи R2 |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | ключи R2 (только если не используете Blob) |
 | `AWS_BUCKET` | имя бакета |
 | `AWS_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` |
 | `AWS_URL` | публичный адрес бакета |
