@@ -1,0 +1,30 @@
+name: smoke
+
+# Проверка живого сайта на Vercel: коды ответа основных страниц.
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Vercel deployment
+        if: github.event_name == 'push'
+        run: sleep 90
+
+      - name: Check pages
+        env:
+          SITE: https://aga-am.vercel.app
+        run: |
+          fail=0
+          for path in / /up /login /register /film/1; do
+            code=$(curl -s -o body.txt -w '%{http_code}' "$SITE$path")
+            echo "== $path -> $code ($(wc -c < body.txt) bytes)"
+            if [ "$code" -ge 500 ]; then
+              fail=1
+              head -c 500 body.txt; echo
+            fi
+          done
+          exit $fail
