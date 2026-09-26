@@ -9,6 +9,10 @@ on:
         description: 'Заполнить базу демо-данными (db:seed)'
         type: boolean
         default: false
+      reset_password_email:
+        description: 'Сбросить пароль этому пользователю (email). Новый пароль берётся из секрета SEED_ADMIN_PASSWORD'
+        type: string
+        default: ''
 
 jobs:
   migrate:
@@ -31,6 +35,10 @@ jobs:
           DB_CONNECTION: pgsql
           DB_URL: ${{ secrets.PROD_DB_URL }}
           SEED_ADMIN_PASSWORD: ${{ secrets.SEED_ADMIN_PASSWORD }}
+          RESET_EMAIL: ${{ inputs.reset_password_email }}
         run: |
           php artisan migrate --force
           if [ "${{ inputs.seed }}" = "true" ]; then php artisan db:seed --force; fi
+          if [ -n "$RESET_EMAIL" ]; then
+            NEW_PASSWORD="$SEED_ADMIN_PASSWORD" php artisan user:password "$RESET_EMAIL"
+          fi
