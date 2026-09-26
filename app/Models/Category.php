@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-
     // Можно явно указать таблицу (не обязательно, т.к. Laravel сам использует 'categories')
     protected $table = 'categories';
 

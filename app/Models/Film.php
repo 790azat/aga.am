@@ -11,7 +11,6 @@ class Film extends Model
 
     protected $fillable = ['name', 'category_id', 'genres', 'year', 'director', 'producer', 'poster', 'background', 'logo', 'video', 'description', 'rating'];
 
-
     protected $casts = [
         'genres' => 'array',
     ];
@@ -28,15 +27,6 @@ class Film extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function getCategoryAttribute()
-    {
-        if (!$this->category_id) {
-            return null;
-        }
-
-        return Category::find($this->category_id);
-    }
-
     public function comments()
     {
         return $this->hasMany(Comment::class, 'film_id');
@@ -47,6 +37,4 @@ class Film extends Model
         return $this->belongsToMany(Actor::class, 'actor_film', 'film_id', 'actor_id')
             ->withTimestamps();
     }
-
-
 }

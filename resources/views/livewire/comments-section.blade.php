@@ -3,6 +3,7 @@
         <div class="container py-3">
 
             <!-- ADD COMMENT -->
+            @auth
             <section>
                 <div class="row justify-content-center">
                     <div class="col-md-11 col-lg-10 col-xl-8">
@@ -59,6 +60,19 @@
                     </div>
                 </div>
             </section>
+            @else
+            <section>
+                <div class="row justify-content-center">
+                    <div class="col-md-11 col-lg-10 col-xl-8">
+                        <div class="card shadow-sm" style="background:#1f1f1f;color:#eaeaea;border:1px solid #2a2a2a;">
+                            <div class="card-body p-4 text-center">
+                                <a href="{{ route('login') }}" class="btn btn-danger">Log in to leave a comment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            @endauth
 
             <!-- COMMENTS -->
             <section class="py-5">

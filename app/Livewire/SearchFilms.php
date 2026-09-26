@@ -8,6 +8,7 @@ use Livewire\Component;
 class SearchFilms extends Component
 {
     public string $search = '';
+
     public bool $showDropdown = false;
 
     public function updatedSearch()
@@ -27,7 +28,7 @@ class SearchFilms extends Component
 
         if ($this->showDropdown) {
             $films = Film::query()
-                ->where('name', 'like', '%' . $this->search . '%')
+                ->where('name', 'like', '%'.$this->search.'%')
                 ->limit(10)
                 ->get();
         }

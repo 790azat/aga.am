@@ -13,9 +13,12 @@ class AdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string ...$types): Response
     {
-        if (!auth()->check() || auth()->user()->type !== 'admin') {
+        // По умолчанию доступ только у админа; 'admin:admin,moderator' пускает и модераторов
+        $types = $types ?: ['admin'];
+
+        if (! auth()->check() || ! in_array(auth()->user()->type, $types, true)) {
             abort(403);
         }
 

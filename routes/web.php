@@ -7,38 +7,31 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PosterController;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 use Laravel\Socialite\Facades\Socialite;
-
 
 Auth::routes();
 
-Route::get('/', PosterController::class . '@index');
+Route::get('/', PosterController::class.'@index');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/film/{film_id}', [FilmController::class, 'index']);
-Route::get('/actor/{id}', ActorController::class . '@index')->name('actor.index');
+Route::get('/actor/{id}', ActorController::class.'@index')->name('actor.index');
 
-
-
-// FILM (только авторизованный)
-Route::middleware('admin')->group(function () {
+// FILM (админ и модератор)
+Route::middleware('admin:admin,moderator')->group(function () {
 
     Route::post('/film/upload', [FilmController::class, 'upload'])->name('film.upload');
-    Route::put('/film/{id}', [FilmController::class, 'update'])->name('film.update');
-    Route::delete('/film/{id}', [FilmController::class, 'destroy'])->name('film.destroy');
+    Route::put('/film/{film}', [FilmController::class, 'update'])->name('film.update');
+    Route::delete('/film/{film}', [FilmController::class, 'destroy'])->name('film.destroy');
 
 });
 
-
-// ADMIN PANEL (доступ админ/модератор — зависит от твоего user.type)
+// ADMIN PANEL (доступ админ/модератор)
 Route::prefix('admin')
-    ->middleware('admin')
+    ->middleware('admin:admin,moderator')
     ->group(function () {
 
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-        Route::get('/moderators', [AdminController::class, 'moderators'])->name('admin.moderators');
         Route::get('/films', [AdminController::class, 'films'])->name('admin.films');
 
         Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories');
@@ -52,11 +45,12 @@ Route::prefix('admin')
         Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
     });
 
-
-// ONLY ADMIN (редактирование модераторов)
+// ONLY ADMIN (управление модераторами)
 Route::prefix('admin')
     ->middleware('admin')
     ->group(function () {
+
+        Route::get('/moderators', [AdminController::class, 'moderators'])->name('admin.moderators');
 
         Route::post('/make-moderator', [ModeratorController::class, 'makeModerator'])->name('admin.users.makeModerator');
         Route::post('/remove-moderator', [ModeratorController::class, 'removeModerator'])->name('admin.users.removeModerator');
@@ -73,7 +67,7 @@ Route::get('/auth/google/callback', function () {
     $googleUser = Socialite::driver('google')->user();
 
     $avatarUrl = str_replace('s96-c', 's512-c', $googleUser->getAvatar());
-    $avatarPath = 'avatars/' . $googleUser->getId() . '.png';
+    $avatarPath = 'avatars/'.$googleUser->getId().'.png';
 
     // скачать аватар
     $avatar = Http::get($avatarUrl)->body();
@@ -83,7 +77,7 @@ Route::get('/auth/google/callback', function () {
 
     $user = User::where('email', $googleUser->email)->first();
 
-    if (!$user) {
+    if (! $user) {
 
         $user = User::create([
             'name' => explode(' ', $googleUser->name)[0],
@@ -95,7 +89,7 @@ Route::get('/auth/google/callback', function () {
 
     } else {
 
-        if (!$user->google_id) {
+        if (! $user->google_id) {
             $user->google_id = $googleUser->getId();
         }
 
@@ -108,9 +102,3 @@ Route::get('/auth/google/callback', function () {
 
     return redirect('/home');
 });
-
-
-
-
-
-

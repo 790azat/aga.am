@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,7 +17,7 @@ class ModeratorController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        $new_user = new User();
+        $new_user = new User;
 
         $new_user->type = 'moderator';
         $new_user->name = $request->name;
@@ -26,7 +26,7 @@ class ModeratorController extends Controller
 
         $new_user->save();
 
-        return redirect()->back()->with('success', "New moderator is added");
+        return redirect()->back()->with('success', 'New moderator is added');
     }
 
     // Убрать модератора (сделать обычным пользователем)
@@ -35,7 +35,7 @@ class ModeratorController extends Controller
         // Удалять можно только модераторов, а не админов или обычных пользователей
         User::where('type', 'moderator')->findOrFail($request->id)->delete();
 
-        return redirect()->back()->with('success', "Modarator was removed");
+        return redirect()->back()->with('success', 'Modarator was removed');
     }
 
     public function changePassword(Request $request)
@@ -49,7 +49,7 @@ class ModeratorController extends Controller
         $user = Auth::user();
 
         // Проверяем текущий пароль
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Actor;
 use App\Models\Film;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
@@ -13,14 +12,14 @@ class FilmController extends Controller
     /* ================= FILM PAGE ================= */
     public function index($film_id)
     {
-        $film = Film::findOrFail($film_id);
+        $film = Film::with(['actors', 'category'])->findOrFail($film_id);
 
         $relatedFilms = Film::where('category_id', $film->category_id)
             ->where('id', '!=', $film->id)
             ->limit(6)
             ->get();
 
-        $comments = Film::find($film_id)->comments;
+        $comments = $film->comments;
 
         return view('film', compact('film', 'relatedFilms', 'comments'));
     }
@@ -30,13 +29,10 @@ class FilmController extends Controller
     {
         $data = $this->validateData($request);
 
-        $film = new Film($data);
+        $film = new Film(collect($data)->except(['actors', 'added_genres', 'poster', 'background', 'logo', 'video'])->all());
 
-        // category
-        $film->category_id = $request->category_id;
-
-        // genres → string
-        $film->genres = $request->added_genres;
+        // жанры хранятся как массив id категорий
+        $film->genres = $data['added_genres'] ?? [];
 
         // files
         $film->poster = $this->uploadFile($request, 'poster', 'posters');
@@ -46,85 +42,37 @@ class FilmController extends Controller
 
         $film->save();
 
-        $actors = explode(',', $request->actors);
-
-        foreach ($actors as $actorName) {
-
-            $actorName = trim($actorName);
-
-            if ($actorName) {
-
-                $actor = new Actor();
-                $actor->name = $actorName;
-                $actor->save();
-
-                DB::table('actor_film')->insert([
-                    'actor_id' => $actor->id,
-                    'film_id'  => $film->id
-                ]);
-            }
-        }
+        $this->syncActors($film, $request->actors);
 
         return back()->with('success', 'Film uploaded successfully!');
     }
 
-
     /* ================= UPDATE ================= */
     public function update(Request $request, Film $film)
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'category_id' => 'required|integer',
-            'added_genres' => 'required|array',
-            'poster' => 'nullable|image',
-            'background' => 'nullable|image',
-            'logo' => 'nullable|image',
-            'video' => 'nullable|mimes:mp4,mov,avi',
-            'year' => 'nullable|integer',
-            'actors' => 'nullable|string',
-            'director' => 'nullable|string',
-            'producer' => 'nullable|string',
-        ]);
+        $data = $this->validateData($request);
 
-        $data['genres'] = $data['added_genres'];
-        // Загружаем файлы если есть
+        $film->fill(collect($data)->except(['actors', 'added_genres', 'poster', 'background', 'logo', 'video'])->all());
+        $film->genres = $data['added_genres'] ?? [];
 
-        if($request->hasFile('poster')) $data['poster'] = $request->file('poster')->store('posters','public');
-        if($request->hasFile('background')) $data['background'] = $request->file('background')->store('backgrounds','public');
-        if($request->hasFile('logo')) $data['logo'] = $request->file('logo')->store('logos','public');
-        if($request->hasFile('video')) $data['video'] = $request->file('video')->store('videos','public');
-
-
-        $actors = explode(',', $request->actors);
-
-        foreach ($actors as $actorName) {
-
-            $actorName = trim($actorName);
-
-            if ($actorName) {
-
-                $actor = new Actor();
-                $actor->name = $actorName;
-                $actor->save();
-
-                DB::table('actor_film')->insert([
-                    'actor_id' => $actor->id,
-                    'film_id'  => $request['id']
-                ]);
+        // Загружаем новые файлы, старые удаляем
+        foreach (['poster' => 'posters', 'background' => 'backgrounds', 'logo' => 'logos', 'video' => 'videos'] as $field => $folder) {
+            if ($request->hasFile($field)) {
+                $this->deleteFile($film->$field);
+                $film->$field = $this->uploadFile($request, $field, $folder);
             }
         }
 
-        Film::find($request['id'])->update($data);
+        $film->save();
 
-        return redirect()->back()->with('success','Film updated successfully!');
+        $this->syncActors($film, $request->actors);
+
+        return redirect()->back()->with('success', 'Film updated successfully!');
     }
 
-
-
     /* ================= DELETE ================= */
-    public function destroy($id)
+    public function destroy(Film $film)
     {
-        $film = Film::findOrFail($id);
 
         $this->deleteFile($film->poster);
         $this->deleteFile($film->background);
@@ -138,22 +86,38 @@ class FilmController extends Controller
 
     /* ================= HELPERS ================= */
 
-    private function validateData(Request $request, $isCreate = true)
+    private function validateData(Request $request)
     {
         return $request->validate([
-            'name'       => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'category_id' => 'nullable|integer|exists:categories,id',
-            'year'       => 'nullable|integer',
-            'actors'     => 'nullable|string',
-            'director'   => 'nullable|string',
-            'producer'   => 'nullable|string',
-            'genres'     => 'nullable|array',
+            'year' => 'nullable|integer',
+            'actors' => 'nullable|string',
+            'director' => 'nullable|string',
+            'producer' => 'nullable|string',
+            'added_genres' => 'nullable|array',
+            'added_genres.*' => 'integer|exists:categories,id',
 
-            'poster'     => 'nullable|image|max:10240',
+            'poster' => 'nullable|image|max:10240',
             'background' => 'nullable|image|max:10240',
-            'logo'       => 'nullable|image|max:10240',
-            'video'      => 'nullable|mimes:mp4,mov,avi,webm|max:512000',
+            'logo' => 'nullable|image|max:10240',
+            'video' => 'nullable|mimes:mp4,mov,avi,webm|max:512000',
         ]);
+    }
+
+    /**
+     * Привязать актёров по именам через запятую.
+     * Существующие актёры переиспользуются, дубликаты не создаются.
+     */
+    private function syncActors(Film $film, ?string $actors): void
+    {
+        $ids = collect(explode(',', (string) $actors))
+            ->map(fn ($name) => trim($name))
+            ->filter()
+            ->unique()
+            ->map(fn ($name) => Actor::firstOrCreate(['name' => $name])->id);
+
+        $film->actors()->sync($ids);
     }
 
     private function uploadFile(Request $request, $field, $folder)
