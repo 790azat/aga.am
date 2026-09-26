@@ -9,7 +9,7 @@ class ActorController extends Controller
 {
     public function index($id) {
 
-        $actor = Actor::find($id);
+        $actor = Actor::with('films')->findOrFail($id);
 
         return view('actor', compact('actor'));
     }

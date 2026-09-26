@@ -9,10 +9,13 @@ class ExampleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_returns_a_successful_response(): void
+    public function test_welcome_page_is_available_for_guests(): void
     {
-        $response = $this->get(route('home'));
+        $this->get('/')->assertOk();
+    }
 
-        $response->assertStatus(200);
+    public function test_reset_route_no_longer_exists(): void
+    {
+        $this->get('/reset')->assertNotFound();
     }
 }

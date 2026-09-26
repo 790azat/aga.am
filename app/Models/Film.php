@@ -28,15 +28,6 @@ class Film extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function getCategoryAttribute()
-    {
-        if (!$this->category_id) {
-            return null;
-        }
-
-        return Category::find($this->category_id);
-    }
-
     public function comments()
     {
         return $this->hasMany(Comment::class, 'film_id');

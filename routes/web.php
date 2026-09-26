@@ -7,9 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PosterController;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 use Laravel\Socialite\Facades\Socialite;
 
 
@@ -22,23 +20,22 @@ Route::get('/actor/{id}', ActorController::class . '@index')->name('actor.index'
 
 
 
-// FILM (только авторизованный)
-Route::middleware('admin')->group(function () {
+// FILM (админ и модератор)
+Route::middleware('admin:admin,moderator')->group(function () {
 
     Route::post('/film/upload', [FilmController::class, 'upload'])->name('film.upload');
-    Route::put('/film/{id}', [FilmController::class, 'update'])->name('film.update');
-    Route::delete('/film/{id}', [FilmController::class, 'destroy'])->name('film.destroy');
+    Route::put('/film/{film}', [FilmController::class, 'update'])->name('film.update');
+    Route::delete('/film/{film}', [FilmController::class, 'destroy'])->name('film.destroy');
 
 });
 
 
-// ADMIN PANEL (доступ админ/модератор — зависит от твоего user.type)
+// ADMIN PANEL (доступ админ/модератор)
 Route::prefix('admin')
-    ->middleware('admin')
+    ->middleware('admin:admin,moderator')
     ->group(function () {
 
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-        Route::get('/moderators', [AdminController::class, 'moderators'])->name('admin.moderators');
         Route::get('/films', [AdminController::class, 'films'])->name('admin.films');
 
         Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories');
@@ -53,10 +50,12 @@ Route::prefix('admin')
     });
 
 
-// ONLY ADMIN (редактирование модераторов)
+// ONLY ADMIN (управление модераторами)
 Route::prefix('admin')
     ->middleware('admin')
     ->group(function () {
+
+        Route::get('/moderators', [AdminController::class, 'moderators'])->name('admin.moderators');
 
         Route::post('/make-moderator', [ModeratorController::class, 'makeModerator'])->name('admin.users.makeModerator');
         Route::post('/remove-moderator', [ModeratorController::class, 'removeModerator'])->name('admin.users.removeModerator');
