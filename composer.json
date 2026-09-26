@@ -11,7 +11,6 @@
     "require": {
         "php": "^8.4",
         "ext-curl": "*",
-        "google/apiclient": "^2.20",
         "laravel/framework": "^13.0",
         "laravel/socialite": "^5.31",
         "laravel/tinker": "^3.0",
@@ -77,12 +76,21 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "pre-autoload-dump": [
+            "Aws\\Script\\Composer\\Composer::removeUnusedServices"
+        ],
+        "vercel": [
+            "Aws\\Script\\Composer\\Composer::removeUnusedServices"
         ]
     },
     "extra": {
         "laravel": {
             "dont-discover": []
-        }
+        },
+        "aws/aws-sdk-php": [
+            "S3"
+        ]
     },
     "config": {
         "optimize-autoloader": true,
