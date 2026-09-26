@@ -11,7 +11,7 @@
                 <div class="col-6 d-flex flex-column justify-content-end gap-3">
                     <div class="col-12">
                         <div style="width: 200px" class="rounded-2 overflow-hidden">
-                            <img src="{{ $actor->avatar ? asset('public/storage/' . $actor->avatar) : asset('images/actor-placeholder.png') }}"
+                            <img src="{{ $actor->avatar ? storage_url($actor->avatar) : asset('images/actor-placeholder.png') }}"
                                  style="width: 100%; height: 100%;" alt="{{ $actor->name }}">
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                                 @foreach($actor->films as $film)
                                     <a href="/film/{{ $film->id }}" class="col d-flex flex-column related-card" style="max-width:120px">
                                         <div class="related-poster skeleton">
-                                            <img src="{{ $film->poster ? asset('public/storage/' . $film->poster) : asset('images/poster-placeholder.png') }}"
+                                            <img src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}"
                                                  alt="{{ $film->name }}"
                                                  loading="lazy"
                                                  onload="this.parentElement.classList.remove('skeleton')">
@@ -66,7 +66,7 @@
                     @foreach($actor->films as $film)
                         <a href="/film/{{ $film->id }}" class="col-auto d-flex flex-column related-card" style="max-width:150px;">
                             <div class="related-poster skeleton">
-                                <img src="{{ $film->poster ? asset('public/storage/' . $film->poster) : asset('images/poster-placeholder.png') }}"
+                                <img src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}"
                                      alt="{{ $film->name }}"
                                      loading="lazy"
                                      onload="this.parentElement.classList.remove('skeleton')">

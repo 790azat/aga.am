@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * Точка входа для Vercel (runtime vercel-php).
+ * Файловая система Vercel доступна на запись только в /tmp,
+ * поэтому все кэши, скомпилированные шаблоны и storage уходят туда.
+ */
+
+$defaults = [
+    'APP_ENV' => 'production',
+    'APP_DEBUG' => 'false',
+    'LARAVEL_STORAGE_PATH' => '/tmp/storage',
+    'APP_CONFIG_CACHE' => '/tmp/cache/config.php',
+    'APP_EVENTS_CACHE' => '/tmp/cache/events.php',
+    'APP_PACKAGES_CACHE' => '/tmp/cache/packages.php',
+    'APP_ROUTES_CACHE' => '/tmp/cache/routes.php',
+    'APP_SERVICES_CACHE' => '/tmp/cache/services.php',
+    'VIEW_COMPILED_PATH' => '/tmp/storage/framework/views',
+    'LOG_CHANNEL' => 'stderr',
+    'SESSION_DRIVER' => 'cookie',
+    'CACHE_STORE' => 'database',
+    'QUEUE_CONNECTION' => 'sync',
+    'PUBLIC_DISK_DRIVER' => 's3',
+];
+
+foreach ($defaults as $key => $value) {
+    if (getenv($key) === false) {
+        putenv("{$key}={$value}");
+        $_ENV[$key] = $_SERVER[$key] = $value;
+    }
+}
+
+foreach (['/tmp/cache', '/tmp/storage/framework/views', '/tmp/storage/framework/cache', '/tmp/storage/framework/sessions', '/tmp/storage/logs', '/tmp/storage/app/public'] as $dir) {
+    if (! is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+}
+
+require __DIR__.'/../public/index.php';

@@ -32,7 +32,7 @@
                 @else
                     <li class="nav-item dropdown">
                         <button id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <img src="{{ asset('public/storage/' . Auth::user()->avatar) }}" style="width: 30px;height: 30px" alt="">
+                            <img src="{{ storage_url(Auth::user()->avatar) }}" style="width: 30px;height: 30px" alt="">
                             <p>{{ Auth::user()->name }}</p>
                         </button>
 

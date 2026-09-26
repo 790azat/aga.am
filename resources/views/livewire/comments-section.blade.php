@@ -14,7 +14,7 @@
 
                                 <div class="d-flex align-items-start gap-3">
                                     <img
-                                        src="{{ asset('public/storage/' . Auth::user()->avatar) }}"
+                                        src="{{ storage_url(Auth::user()->avatar) }}"
                                         class="rounded-circle"
                                         width="65"
                                         height="65"
@@ -82,7 +82,7 @@
                         @foreach($comments as $comment)
                             <div class="d-flex gap-3 mb-4">
                                 <img
-                                    src="{{ asset('public/storage/' . $comment->user->avatar) }}"
+                                    src="{{ storage_url($comment->user->avatar) }}"
                                     class="rounded-circle"
                                     width="65"
                                     height="65"

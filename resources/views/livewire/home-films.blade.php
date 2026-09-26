@@ -118,7 +118,7 @@
 
                                 <div style="height:260px; overflow:hidden; border-radius:10px;">
                                     <img
-                                        src="{{ $film->poster ? asset('storage/'.$film->poster) : asset('images/poster-placeholder.png') }}"
+                                        src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}"
                                         class="w-100 h-100"
                                         style="object-fit:cover;">
                                 </div>
