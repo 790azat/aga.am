@@ -75,9 +75,11 @@ class VercelBlobDiskTest extends TestCase
         $this->get('/media/videos/none.mp4')->assertNotFound();
     }
 
-    public function test_media_route_is_404_without_blob(): void
+    public function test_missing_local_files_show_placeholders(): void
     {
-        $this->get('/media/posters/a.jpg')->assertNotFound();
+        $this->get('/storage/posters/none.png')->assertRedirect(asset('images/poster-placeholder.png'));
+        $this->get('/media/actors/none.jpg')->assertRedirect(asset('images/actor-placeholder.png'));
+        $this->get('/storage/videos/none.mp4')->assertNotFound();
     }
 
     public function test_upload_puts_file_with_fixed_pathname(): void

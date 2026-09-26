@@ -31,6 +31,14 @@ Route::get('/media/{path}', MediaController::class)->where('path', '.*')->name('
         ShareErrorsFromSession::class,
         PreventRequestForgery::class,
     ]);
+Route::get('/storage/{path}', [MediaController::class, 'missing'])->where('path', '.*')->name('storage.missing')
+    ->withoutMiddleware([
+        EncryptCookies::class,
+        AddQueuedCookiesToResponse::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        PreventRequestForgery::class,
+    ]);
 
 // FILM (админ и модератор)
 Route::middleware('admin:admin,moderator')->group(function () {

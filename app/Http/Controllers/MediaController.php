@@ -18,6 +18,7 @@ class MediaController extends Controller
     // Заглушки для файлов, которых ещё нет в хранилище (например, не перенесённых со старого хостинга).
     private const PLACEHOLDERS = [
         'posters' => 'images/poster-placeholder.png',
+        'actors' => 'images/actor-placeholder.png',
         'backgrounds' => 'images/background-placeholder.png',
         'logos' => 'images/logo-placeholder.png',
         'avatars' => 'images/actor-placeholder.png',
@@ -26,13 +27,16 @@ class MediaController extends Controller
     public function __invoke(Request $request, string $path)
     {
         $adapter = Storage::disk('public')->getAdapter();
-        abort_unless($adapter instanceof VercelBlobAdapter, 404);
         abort_if(str_contains($path, '..'), 404);
+
+        if (! $adapter instanceof VercelBlobAdapter) {
+            return $this->missing($path);
+        }
 
         $blob = $adapter->fetch($path, $this->range($request->header('Range')));
 
-        if ($blob->status() === 404 && $placeholder = self::PLACEHOLDERS[strstr($path, '/', true)] ?? null) {
-            return redirect(asset($placeholder))->header('Cache-Control', 'public, max-age=300');
+        if ($blob->status() === 404) {
+            return $this->missing($path);
         }
 
         abort_unless(in_array($blob->status(), [200, 206], true), $blob->status() === 416 ? 416 : 404);
@@ -56,6 +60,18 @@ class MediaController extends Controller
                 flush();
             }
         }, $blob->status() === 206 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK, $headers);
+    }
+
+    /**
+     * Файла нет: для картинок отдаём заглушку. Сюда же попадают ссылки /storage/..., если
+     * самого файла на диске нет (например, на Vercel без подключённого хранилища).
+     */
+    public function missing(string $path)
+    {
+        $placeholder = self::PLACEHOLDERS[strstr($path, '/', true)] ?? null;
+        abort_unless($placeholder, 404);
+
+        return redirect(asset($placeholder))->header('Cache-Control', 'public, max-age=300');
     }
 
     /**
