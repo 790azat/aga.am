@@ -81,7 +81,8 @@
             "Aws\\Script\\Composer\\Composer::removeUnusedServices"
         ],
         "vercel": [
-            "Aws\\Script\\Composer\\Composer::removeUnusedServices"
+            "Aws\\Script\\Composer\\Composer::removeUnusedServices",
+            "@php scripts/vercel-assets.php"
         ]
     },
     "extra": {
