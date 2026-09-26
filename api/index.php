@@ -24,6 +24,15 @@ $defaults = [
     'PUBLIC_DISK_DRIVER' => getenv('AWS_BUCKET') ? 's3' : 'local',
 ];
 
+// Пустые переменные в Vercel считаем незаданными: иначе Laravel получает '' вместо значения
+// по умолчанию (например, SESSION_DRIVER='' ломал все страницы).
+foreach (getenv() as $key => $value) {
+    if ($value === '') {
+        putenv($key);
+        unset($_ENV[$key], $_SERVER[$key]);
+    }
+}
+
 foreach ($defaults as $key => $value) {
     if (getenv($key) === false) {
         putenv("{$key}={$value}");
