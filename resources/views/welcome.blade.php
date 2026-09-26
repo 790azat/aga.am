@@ -33,7 +33,7 @@
         @auth
             <a href="{{ route('home') }}"
                class="btn btn-outline-light rounded-pill d-flex align-items-center gap-2 px-3 py-2">
-                <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                <img src="{{ storage_url(Auth::user()->avatar) }}"
                      style="width:30px;height:30px;object-fit:cover;border-radius:50%" alt="">
                 <span class="text-light">{{ Auth::user()->name }}</span>
             </a>
@@ -113,7 +113,7 @@
             <div class="row row-cols-2 row-cols-sm-3 g-3">
                 @foreach($posters as $poster)
                     <div class="col">
-                        <img src="{{ asset('storage/' . $poster) }}"
+                        <img src="{{ storage_url($poster) }}"
                              class="img-fluid rounded-3"
                              style="object-fit:cover"
                              alt="Poster">

@@ -271,10 +271,10 @@
                     @foreach($films as $film)
                         <tr>
                             <td>{{ $film->id }}</td>
-                            <td><img src="{{ $film->poster ? asset('storage/'.$film->poster) : asset('images/poster-placeholder.png') }}" style="max-height:50px" class="rounded"></td>
+                            <td><img src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}" style="max-height:50px" class="rounded"></td>
                             <td>
                                 @if($film->logo)
-                                    <img src="{{ asset('storage/'.$film->logo) }}" style="max-height:50px" class="rounded">
+                                    <img src="{{ storage_url($film->logo) }}" style="max-height:50px" class="rounded">
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif
@@ -295,7 +295,7 @@
                             </td>
                             <td>
                                 @if($film->background)
-                                    <img src="{{ asset('storage/'.$film->background) }}" style="max-height:40px" class="rounded">
+                                    <img src="{{ storage_url($film->background) }}" style="max-height:40px" class="rounded">
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif
@@ -303,7 +303,7 @@
                             <td>{{ $film->year }}</td>
                             <td>
                                 @if($film->video)
-                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#videoModal" data-video="{{ asset('storage/'.$film->video) }}">
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#videoModal" data-video="{{ storage_url($film->video) }}">
                                         <i class="fa-solid fa-play"></i>
                                     </button>
                                 @else
@@ -320,10 +320,10 @@
                                     <button class="btn btn-sm btn-warning editFilmBtn text-nowrap"
                                             data-id="{{ $film->id }}"
                                             data-name="{{ $film->name }}"
-                                            data-poster="{{ $film->poster ? asset('storage/'.$film->poster) : '' }}"
-                                            data-background="{{ $film->background ? asset('storage/'.$film->background) : '' }}"
-                                            data-logo="{{ $film->logo ? asset('storage/'.$film->logo) : '' }}"
-                                            data-video="{{ $film->video ? asset('storage/'.$film->video) : '' }}"
+                                            data-poster="{{ $film->poster ? storage_url($film->poster) : '' }}"
+                                            data-background="{{ $film->background ? storage_url($film->background) : '' }}"
+                                            data-logo="{{ $film->logo ? storage_url($film->logo) : '' }}"
+                                            data-video="{{ $film->video ? storage_url($film->video) : '' }}"
                                             data-category="{{ $film->category_id }}"
                                             data-genres="{{ $film->genres->pluck('id')->join(',') }}"
                                             data-producer="{{ $film->producer }}"
@@ -377,14 +377,14 @@
                             <div class="modal-body">
                                 <div class="row g-3">
                                     <div class="col-md-4 text-center">
-                                        <img src="{{ $film->poster ? asset('storage/'.$film->poster) : asset('images/poster-placeholder.png') }}" class="img-fluid rounded mb-2" style="max-height:150px">
+                                        <img src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}" class="img-fluid rounded mb-2" style="max-height:150px">
                                         @if($film->logo)
-                                            <img src="{{ asset('storage/'.$film->logo) }}" class="img-fluid rounded mb-2" style="max-height:80px">
+                                            <img src="{{ storage_url($film->logo) }}" class="img-fluid rounded mb-2" style="max-height:80px">
                                         @else
                                             <span class="text-muted d-block mb-2">—</span>
                                         @endif
                                         @if($film->background)
-                                            <img src="{{ asset('storage/'.$film->background) }}" class="img-fluid rounded" style="max-height:80px">
+                                            <img src="{{ storage_url($film->background) }}" class="img-fluid rounded" style="max-height:80px">
                                         @else
                                             <span class="text-muted d-block">—</span>
                                         @endif

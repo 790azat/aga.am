@@ -9,7 +9,7 @@
 
     <div class="col-12 mb-5">
         <div class="col-12 d-flex"
-             style="background-image: url('{{ $film->background ? asset('public/storage/' . $film->background) : asset('public/storage/backgrounds/background-placeholder.png') }}');background-size: cover;height: 500px">
+             style="background-image: url('{{ $film->background ? storage_url($film->background) : asset('images/background-placeholder.png') }}');background-size: cover;height: 500px">
             <div class="col-9 mx-auto d-flex">
 
                 <!-- Левая колонка: кнопки, рейтинг -->
@@ -17,7 +17,7 @@
                     <div class="col-12">
                         <div style="width: 200px" class="rounded-2 overflow-hidden">
                             <img
-                                src="{{ $film->poster ? asset('public/storage/' . $film->poster) : asset('images/poster-placeholder.png') }}"
+                                src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}"
                                 style="width: 100%;height: 100%" alt="">
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                                     </div>
 
                                     <div class="modal-body">
-                                        <video src="{{ asset('public/storage/') . '/' . $film->video }}" controls
+                                        <video src="{{ storage_url($film->video) }}" controls
                                                width="100%" height="100%"></video>
                                     </div>
 
@@ -93,7 +93,7 @@
                     <div class="col-12 d-flex justify-content-center align-items-center">
                         <div style="width: 100px">
                             <img
-                                src="{{ $film->logo ? asset('public/storage/' . $film->logo) : asset('images/logo-placeholder.png') }}"
+                                src="{{ $film->logo ? storage_url($film->logo) : asset('images/logo-placeholder.png') }}"
                                 style="width: 100%" alt="{{ $film->name }}">
                         </div>
                     </div>
@@ -162,7 +162,7 @@
                                     <div class="actor-avatar skeleton">
                                         <img
                                             src="{{ $actor->avatar
-                                            ? asset('storage/' . $actor->avatar)
+                                            ? storage_url($actor->avatar)
                                             : asset('images/actor-placeholder.png') }}" alt="{{ $actor->name }}"
                                             loading="lazy"
                                             onload="this.parentElement.classList.remove('skeleton')"
@@ -189,7 +189,7 @@
                                         <div class="related-poster skeleton">
                                             <img
                                                 src="{{ $related->poster
-                        ? asset('public/storage/' . $related->poster)
+                        ? storage_url($related->poster)
                         : asset('images/poster-placeholder.png') }}"
                                                 alt="{{ $related->name }}"
                                                 loading="lazy"
@@ -212,7 +212,7 @@
                     <div class="col-12 mb-3"><p>Trailer & Clips</p></div>
                     @if($film->video)
                         <div class="col-12 mb-3">
-                            <video src="{{ asset('public/storage/' . $film->video) }}" controls
+                            <video src="{{ storage_url($film->video) }}" controls
                                    style="width:100%; height:auto; border-radius:8px;"></video>
                         </div>
                     @else

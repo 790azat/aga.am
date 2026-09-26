@@ -1,0 +1,36 @@
+name: migrate
+
+# Ручной запуск миграций на продакшен-базе (Vercel не умеет запускать artisan при деплое).
+# Нужен секрет репозитория PROD_DB_URL, например postgres://user:pass@host/db?sslmode=require
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: 'Заполнить базу демо-данными (db:seed)'
+        type: boolean
+        default: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          tools: composer:v2
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+
+      - name: Run Migrations
+        env:
+          APP_ENV: production
+          APP_KEY: ${{ secrets.PROD_APP_KEY }}
+          DB_CONNECTION: pgsql
+          DB_URL: ${{ secrets.PROD_DB_URL }}
+          SEED_ADMIN_PASSWORD: ${{ secrets.SEED_ADMIN_PASSWORD }}
+        run: |
+          php artisan migrate --force
+          if [ "${{ inputs.seed }}" = "true" ]; then php artisan db:seed --force; fi
