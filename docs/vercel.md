@@ -33,7 +33,12 @@ Vercel сам добавит переменную `DATABASE_URL`, и сайт п
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | из Google Cloud Console |
 | `GOOGLE_REDIRECT_URI` | `https://<ваш-домен>/auth/google/callback` |
 
+`APP_KEY` обязателен: без него все страницы, кроме `/up`, отвечают 500 (`MissingAppKeyException`).
+Пустые переменные считаются незаданными. Переменные из `.env.example` (`LOG_CHANNEL`, `SESSION_DRIVER` и т.п.) копировать не нужно.
+После изменения переменных сделайте **Redeploy**: уже запущенный деплой новых значений не видит.
+
 Остальные настройки (кэши в `/tmp`, логи в stderr, сессии в cookie) задаются в `api/index.php`.
+Проверить живой сайт можно workflow `smoke` в GitHub Actions: он запускается после каждого пуша в `master`.
 
 ## 4. Миграции
 
