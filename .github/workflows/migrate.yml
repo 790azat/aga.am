@@ -13,6 +13,10 @@ on:
         description: 'Сбросить пароль этому пользователю (email). Новый пароль берётся из секрета SEED_ADMIN_PASSWORD'
         type: string
         default: ''
+      reset_public_key:
+        description: 'Необязательно: публичный RSA-ключ (PEM в base64). Тогда пароль генерируется случайный и печатается только в зашифрованном виде'
+        type: string
+        default: ''
 
 jobs:
   migrate:
@@ -36,9 +40,19 @@ jobs:
           DB_URL: ${{ secrets.PROD_DB_URL }}
           SEED_ADMIN_PASSWORD: ${{ secrets.SEED_ADMIN_PASSWORD }}
           RESET_EMAIL: ${{ inputs.reset_password_email }}
+          RESET_PUBLIC_KEY: ${{ inputs.reset_public_key }}
         run: |
           php artisan migrate --force
           if [ "${{ inputs.seed }}" = "true" ]; then php artisan db:seed --force; fi
-          if [ -n "$RESET_EMAIL" ]; then
+          if [ -n "$RESET_EMAIL" ] && [ -n "$RESET_PUBLIC_KEY" ]; then
+            # Случайный пароль; в лог попадает только шифротекст, расшифровать его может владелец приватного ключа.
+            NEW_PASSWORD=$(openssl rand -base64 18 | tr -d '/+=')
+            echo "::add-mask::$NEW_PASSWORD"
+            echo "$RESET_PUBLIC_KEY" | base64 -d > reset_key.pem
+            NEW_PASSWORD="$NEW_PASSWORD" php artisan user:password "$RESET_EMAIL"
+            echo "Зашифрованный пароль:"
+            printf '%s' "$NEW_PASSWORD" | openssl pkeyutl -encrypt -pubin -inkey reset_key.pem -pkeyopt rsa_padding_mode:oaep | base64 -w0
+            echo
+          elif [ -n "$RESET_EMAIL" ]; then
             NEW_PASSWORD="$SEED_ADMIN_PASSWORD" php artisan user:password "$RESET_EMAIL"
           fi
