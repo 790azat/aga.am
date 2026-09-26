@@ -14,31 +14,48 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
-use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 
 /**
- * Flysystem-адаптер для Vercel Blob (публичные файлы) поверх его HTTP API,
+ * Flysystem-адаптер для Vercel Blob (публичное или приватное хранилище) поверх его HTTP API,
  * того же, что использует официальный пакет @vercel/blob.
  */
 class VercelBlobAdapter implements FilesystemAdapter
 {
     private const API_VERSION = '12';
 
+    /**
+     * @param  string  $access  public или private (как выбрано при создании хранилища)
+     * @param  string|null  $mediaUrl  адрес, через который сайт отдаёт файлы приватного хранилища
+     */
     public function __construct(
         private readonly string $token,
+        private readonly string $access = 'public',
+        private readonly ?string $mediaUrl = null,
         private readonly string $apiUrl = 'https://vercel.com/api/blob',
     ) {}
 
     /**
-     * Адрес публичных файлов хранилища, например https://abc123.public.blob.vercel-storage.com.
+     * Прямой адрес файла в хранилище, например https://abc123.private.blob.vercel-storage.com/posters/a.jpg.
      */
-    public static function publicUrl(string $token): string
+    public function blobUrl(string $path): string
     {
-        $storeId = explode('_', $token)[3] ?? '';
+        $storeId = strtolower(explode('_', $this->token)[3] ?? '');
 
-        return 'https://'.strtolower($storeId).'.public.blob.vercel-storage.com';
+        return 'https://'.$storeId.'.'.$this->access.'.blob.vercel-storage.com/'.ltrim($path, '/');
+    }
+
+    /**
+     * Скачивает файл потоком (для приватного хранилища файлы отдаются через сайт).
+     */
+    public function fetch(string $path, ?string $range = null): Response
+    {
+        return Http::withToken($this->token)
+            ->withHeaders(array_filter(['Range' => $range]))
+            ->withOptions(['stream' => true])
+            ->timeout(60)
+            ->get($this->blobUrl($path));
     }
 
     public function fileExists(string $path): bool
@@ -73,7 +90,7 @@ class VercelBlobAdapter implements FilesystemAdapter
 
     public function read(string $path): string
     {
-        $response = Http::get($this->getUrl($path));
+        $response = Http::withToken($this->token)->timeout(60)->get($this->blobUrl($path));
 
         if (! $response->successful()) {
             throw UnableToReadFile::fromLocation($path, 'HTTP '.$response->status());
@@ -93,7 +110,7 @@ class VercelBlobAdapter implements FilesystemAdapter
 
     public function delete(string $path): void
     {
-        $this->deleteUrls([$this->getUrl($path)], $path);
+        $this->deleteUrls([$this->blobUrl($path)], $path);
     }
 
     public function deleteDirectory(string $path): void
@@ -120,9 +137,7 @@ class VercelBlobAdapter implements FilesystemAdapter
 
     public function setVisibility(string $path, string $visibility): void
     {
-        if ($visibility !== Visibility::PUBLIC) {
-            throw UnableToSetVisibility::atLocation($path, 'Vercel Blob хранит только публичные файлы');
-        }
+        // Доступ задаётся для всего хранилища, а не для отдельных файлов.
     }
 
     public function visibility(string $path): FileAttributes
@@ -182,7 +197,11 @@ class VercelBlobAdapter implements FilesystemAdapter
 
     public function getUrl(string $path): string
     {
-        return self::publicUrl($this->token).'/'.ltrim($path, '/');
+        if ($this->access === 'private' && $this->mediaUrl) {
+            return rtrim($this->mediaUrl, '/').'/'.ltrim($path, '/');
+        }
+
+        return $this->blobUrl($path);
     }
 
     private function put(string $path, string $contents, Config $config): void
@@ -193,7 +212,7 @@ class VercelBlobAdapter implements FilesystemAdapter
 
         $response = $this->request()
             ->withHeaders([
-                'x-vercel-blob-access' => 'public',
+                'x-vercel-blob-access' => $this->access,
                 'x-add-random-suffix' => '0',
                 'x-allow-overwrite' => '1',
                 'x-content-type' => $mime,
@@ -208,7 +227,7 @@ class VercelBlobAdapter implements FilesystemAdapter
 
     private function head(string $path): Response
     {
-        return $this->request()->get($this->apiUrl.'/', ['url' => $this->getUrl($path)]);
+        return $this->request()->get($this->apiUrl.'/', ['url' => $this->blobUrl($path)]);
     }
 
     private function metadata(string $path): FileAttributes

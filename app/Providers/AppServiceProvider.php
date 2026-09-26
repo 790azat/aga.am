@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         Storage::extend('vercel-blob', function ($app, array $config) {
-            $adapter = new VercelBlobAdapter($config['token']);
+            $adapter = new VercelBlobAdapter($config['token'], $config['access'] ?? 'public', $config['media_url'] ?? null);
 
             return new FilesystemAdapter(new Filesystem($adapter, $config), $adapter, $config);
         });

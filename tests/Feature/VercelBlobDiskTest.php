@@ -30,6 +30,41 @@ class VercelBlobDiskTest extends TestCase
         );
     }
 
+    public function test_private_store_is_served_through_site(): void
+    {
+        config(['filesystems.disks.public' => [
+            'driver' => 'vercel-blob',
+            'token' => self::TOKEN,
+            'access' => 'private',
+            'media_url' => '/media',
+        ]]);
+        Storage::forgetDisk('public');
+
+        Http::fake(['abc123.private.blob.vercel-storage.com/*' => Http::response('JPEGDATA', 206, [
+            'Content-Type' => 'image/jpeg',
+            'Content-Range' => 'bytes 0-7/100000000',
+        ])]);
+
+        $this->assertSame('/media/posters/a.jpg', storage_url('posters/a.jpg'));
+
+        $response = $this->get('/media/posters/a.jpg', ['Range' => 'bytes=0-']);
+
+        $response->assertStatus(206)
+            ->assertHeader('Content-Type', 'image/jpeg')
+            ->assertHeader('Content-Range', 'bytes 0-7/100000000')
+            ->assertHeaderMissing('Set-Cookie')
+            ->assertHeader('Cache-Control', 'immutable, max-age=31536000, public, s-maxage=31536000');
+        $this->assertSame('JPEGDATA', $response->streamedContent());
+
+        Http::assertSent(fn (Request $r) => $r->hasHeader('Authorization', 'Bearer '.self::TOKEN)
+            && $r->hasHeader('Range', 'bytes=0-4194303'));
+    }
+
+    public function test_media_route_is_404_without_blob(): void
+    {
+        $this->get('/media/posters/a.jpg')->assertNotFound();
+    }
+
     public function test_upload_puts_file_with_fixed_pathname(): void
     {
         Http::fake(['vercel.com/api/blob/*' => Http::response(['url' => 'x'])]);

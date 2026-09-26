@@ -44,6 +44,9 @@ return [
             'blob' => [
                 'driver' => 'vercel-blob',
                 'token' => env('BLOB_READ_WRITE_TOKEN'),
+                // private: файлы отдаются через /media/... (MediaController), public: прямо из Blob.
+                'access' => env('BLOB_ACCESS', 'private'),
+                'media_url' => '/media',
                 'visibility' => 'public',
                 'throw' => false,
                 'report' => false,

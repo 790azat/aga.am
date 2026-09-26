@@ -4,10 +4,16 @@ use App\Http\Controllers\ActorController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ModeratorController;
 use App\Http\Controllers\PosterController;
 use App\Models\User;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Laravel\Socialite\Facades\Socialite;
 
 Auth::routes();
@@ -16,6 +22,15 @@ Route::get('/', PosterController::class.'@index');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/film/{film_id}', [FilmController::class, 'index']);
 Route::get('/actor/{id}', ActorController::class.'@index')->name('actor.index');
+// Файлы из приватного Vercel Blob. Без сессии и cookies, чтобы CDN мог их кэшировать.
+Route::get('/media/{path}', MediaController::class)->where('path', '.*')->name('media')
+    ->withoutMiddleware([
+        EncryptCookies::class,
+        AddQueuedCookiesToResponse::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        PreventRequestForgery::class,
+    ]);
 
 // FILM (админ и модератор)
 Route::middleware('admin:admin,moderator')->group(function () {
