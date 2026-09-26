@@ -20,8 +20,6 @@ $defaults = [
     'SESSION_DRIVER' => 'cookie',
     'CACHE_STORE' => 'database',
     'QUEUE_CONNECTION' => 'sync',
-    // Медиа в R2/S3, только если бакет настроен; иначе сайт падал бы на любой странице с постерами.
-    'PUBLIC_DISK_DRIVER' => getenv('BLOB_READ_WRITE_TOKEN') ? 'blob' : (getenv('AWS_BUCKET') ? 's3' : 'local'),
 ];
 
 // Пустые переменные в Vercel считаем незаданными: иначе Laravel получает '' вместо значения
@@ -39,6 +37,28 @@ foreach ($defaults as $key => $value) {
         $_ENV[$key] = $_SERVER[$key] = $value;
     }
 }
+
+/*
+ * Хранилище медиа. Локальный диск на Vercel не работает (файлы не сохраняются между запросами),
+ * поэтому, если подключён Vercel Blob, используем его, даже если в переменных стоит PUBLIC_DISK_DRIVER=local.
+ * Токен ищем по значению: при подключении Blob переменная может получить свой префикс (не BLOB_).
+ */
+if (! getenv('BLOB_READ_WRITE_TOKEN')) {
+    foreach (getenv() as $key => $value) {
+        if (str_ends_with($key, 'READ_WRITE_TOKEN') && str_starts_with($value, 'vercel_blob_rw_')) {
+            putenv("BLOB_READ_WRITE_TOKEN={$value}");
+            $_ENV['BLOB_READ_WRITE_TOKEN'] = $_SERVER['BLOB_READ_WRITE_TOKEN'] = $value;
+            break;
+        }
+    }
+}
+
+$disk = getenv('PUBLIC_DISK_DRIVER') ?: 'local';
+if ($disk === 'local') {
+    $disk = getenv('BLOB_READ_WRITE_TOKEN') ? 'blob' : (getenv('AWS_BUCKET') ? 's3' : 'local');
+}
+putenv("PUBLIC_DISK_DRIVER={$disk}");
+$_ENV['PUBLIC_DISK_DRIVER'] = $_SERVER['PUBLIC_DISK_DRIVER'] = $disk;
 
 /*
  * PHP на Vercel собран со старым libpq 13 без SNI, и Neon не может определить endpoint
