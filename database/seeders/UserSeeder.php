@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Foundation\Auth\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -14,10 +15,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Пароль админов берётся из .env (SEED_ADMIN_PASSWORD), в репозитории его нет.
+        // Если переменная не задана, генерируется случайный пароль.
+        $adminPassword = env('SEED_ADMIN_PASSWORD') ?: Str::random(32);
+
         User::create([
             'name' => 'Azat',
             'email' => 'vip.azatazat@gmail.com',
-            'password' => Hash::make('790FerariFerari790.'),
+            'password' => Hash::make($adminPassword),
             'avatar' => 'avatars/azat.png',
             'type' => 'admin',
         ]);
@@ -25,7 +30,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Andranik',
             'email' => 'andranikabrahamianwork@gmail.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make($adminPassword),
             'avatar' => 'avatars/andranik.jpg',
             'type' => 'admin',
         ]);

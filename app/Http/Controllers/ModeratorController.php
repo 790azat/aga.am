@@ -32,7 +32,8 @@ class ModeratorController extends Controller
     // Убрать модератора (сделать обычным пользователем)
     public function removeModerator(Request $request)
     {
-        User::find($request->id)->delete();
+        // Удалять можно только модераторов, а не админов или обычных пользователей
+        User::where('type', 'moderator')->findOrFail($request->id)->delete();
 
         return redirect()->back()->with('success', "Modarator was removed");
     }
