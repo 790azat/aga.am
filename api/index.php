@@ -59,6 +59,13 @@ foreach (['DB_URL', 'DATABASE_URL'] as $key) {
     $_ENV[$key] = $_SERVER[$key] = $url;
 }
 
+// Vercel принимает HTTPS и проксирует запрос во встроенный сервер PHP по HTTP.
+// Без этого Laravel строит ссылки на CSS/JS с http://, и браузер блокирует их как mixed content.
+if (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+    $_SERVER['SERVER_PORT'] = 443;
+}
+
 // Логи только в stderr: их видно во вкладке Logs на Vercel (файлы в /tmp никто не прочитает).
 putenv('LOG_CHANNEL=stderr');
 $_ENV['LOG_CHANNEL'] = $_SERVER['LOG_CHANNEL'] = 'stderr';

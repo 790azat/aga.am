@@ -27,4 +27,12 @@ jobs:
               head -c 500 body.txt; echo
             fi
           done
+          # CSS/JS со главной: должны быть https и отдаваться с кодом 200.
+          curl -s "$SITE/" -o home.html
+          for url in $(grep -oE '(href|src)="[^"]*/build/[^"]+"' home.html | sed -E 's/^(href|src)="//; s/"$//' | sort -u); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$url")
+            echo "== asset $url -> $code"
+            case "$url" in https://*) ;; *) echo "   not https"; fail=1;; esac
+            [ "$code" = "200" ] || fail=1
+          done
           exit $fail
