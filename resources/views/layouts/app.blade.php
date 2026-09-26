@@ -15,16 +15,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" href="{{ asset('images/aga logo.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/favicon-64.png') }}" type="image/png">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@hasSection('title')@yield('title') · @endif{{ config('app.name', 'Aga') }}</title>
+    <meta name="description" content="@yield('description', 'Aga — каталог фильмов: трейлеры, актёры и отзывы зрителей.')">
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -3,11 +3,14 @@
     <livewire:search-films></livewire:search-films>
 
     <!-- HERO SECTION -->
+    @php
+        $heroBg = $featured?->background ? storage_url($featured->background) : asset('images/main-poster.webp');
+    @endphp
     <div class="d-flex align-items-center"
          style="min-height:70vh;
                 background:
-                linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.2)),
-                url('{{ asset('images/main-poster.jpg') }}');
+                linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.2)),
+                url('{{ $heroBg }}');
                 background-size:cover;
                 background-position:center;">
 
@@ -15,32 +18,35 @@
             <div class="row">
                 <div class="col-12 col-lg-6 text-light">
 
-                    <div class="d-flex gap-3 align-items-center flex-wrap fw-bold small">
-                        <span class="badge bg-warning">7.5+</span>
-                        <span>•</span>
-                        <span>2018</span>
-                        <span>•</span>
-                        <span>2 seasons</span>
-                    </div>
+                    @if($featured)
+                        <div class="d-flex gap-3 align-items-center flex-wrap fw-bold small">
+                            @if($featured->rating > 0)
+                                <span class="badge bg-warning text-dark"><i class="fa-solid fa-star me-1"></i>{{ number_format($featured->rating, 1) }}</span>
+                            @endif
+                            @if($featured->year)
+                                <span>{{ $featured->year }}</span>
+                            @endif
+                            @if($featured->category)
+                                <span>•</span>
+                                <span>{{ $featured->category->name }}</span>
+                            @endif
+                        </div>
 
-                    <h1 class="fw-bold display-5 mt-3">
-                        Lost in Space
-                    </h1>
+                        <h1 class="fw-bold display-5 mt-3">{{ $featured->name }}</h1>
 
-                    <p class="mt-3 text-secondary">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                        Adipisci aliquam dolorem ex explicabo illo itaque iure maxime.
-                    </p>
+                        @if($featured->description)
+                            <p class="mt-3 text-light opacity-75">{{ \Illuminate\Support\Str::limit($featured->description, 220) }}</p>
+                        @endif
 
-                    <div class="d-flex gap-3 flex-wrap mt-4">
-                        <button class="btn btn-danger rounded-pill px-4">
-                            <i class="fa-solid fa-play me-2"></i> Watch now
-                        </button>
-
-                        <button class="btn btn-outline-light rounded-pill px-4">
-                            <i class="fa-solid fa-square-plus me-2"></i> Add to playlist
-                        </button>
-                    </div>
+                        <div class="d-flex gap-3 flex-wrap mt-4">
+                            <a href="{{ url('/film/'.$featured->id) }}" class="btn btn-danger rounded-pill px-4">
+                                <i class="fa-solid fa-play me-2"></i> Watch now
+                            </a>
+                        </div>
+                    @else
+                        <h1 class="fw-bold display-5">Aga</h1>
+                        <p class="mt-3 text-light opacity-75">Films will appear here soon.</p>
+                    @endif
 
                 </div>
             </div>
@@ -51,28 +57,14 @@
     <!-- TABS -->
     <div class="bg-black border-bottom border-secondary">
         <div class="container">
-            <div class="row text-light text-center">
-
-                <div class="col py-3 border-bottom border-danger border-3">
-                    Trending now
-                </div>
-
-                <div class="col py-3 text-secondary">
-                    Popular
-                </div>
-
-                <div class="col py-3 text-secondary">
-                    Original
-                </div>
-
-                <div class="col py-3 text-secondary">
-                    Premiers
-                </div>
-
-                <div class="col py-3 text-secondary">
-                    Recently added
-                </div>
-
+            <div class="row text-center g-0">
+                @foreach(['trending' => 'Trending now', 'popular' => 'Popular', 'recent' => 'Recently added'] as $key => $label)
+                    <button type="button"
+                            wire:click="selectTab('{{ $key }}')"
+                            class="col py-3 btn btn-link text-decoration-none rounded-0 border-0 {{ $tab === $key ? 'text-light border-bottom border-danger border-3' : 'text-secondary' }}">
+                        {{ $label }}
+                    </button>
+                @endforeach
             </div>
         </div>
     </div>
@@ -116,9 +108,12 @@
 
                             <div class="card bg-dark border-0 text-light h-100">
 
-                                <div style="height:260px; overflow:hidden; border-radius:10px;">
+                                <div class="film-card-poster">
                                     <img
                                         src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}"
+                                        alt="{{ $film->name }}"
+                                        loading="lazy"
+                                        decoding="async"
                                         class="w-100 h-100"
                                         style="object-fit:cover;">
                                 </div>
@@ -131,9 +126,11 @@
 
                                     <div class="d-flex justify-content-between small text-secondary">
                                         <span>{{ $film->year }}</span>
-                                        <span class="text-warning">
-                                            <i class="fa-solid fa-star"></i> 7.5
-                                        </span>
+                                        @if($film->rating > 0)
+                                            <span class="text-warning">
+                                                <i class="fa-solid fa-star"></i> {{ number_format($film->rating, 1) }}
+                                            </span>
+                                        @endif
                                     </div>
 
                                 </div>

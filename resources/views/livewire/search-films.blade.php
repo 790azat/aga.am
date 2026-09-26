@@ -23,7 +23,7 @@
                                 <button class="dropdown-item" type="button">
                                     <div class="col-12 d-flex align-items-center gap-3">
                                         <div class="col-auto" style="width: 50px;height: 70px">
-                                            <img src="{{ storage_url($film->poster) }}" alt="" style="width: 100%;height: 100%;object-fit: cover">
+                                            <img loading="lazy" src="{{ storage_url($film->poster) }}" alt="" style="width: 100%;height: 100%;object-fit: cover">
                                         </div>
                                         <divl class="col-auto">
                                             <p class="fs-5 fw-bold">{{ $film->name }}</p>

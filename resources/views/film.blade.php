@@ -1,226 +1,149 @@
 @extends('layouts.app')
 
+@section('title', $film->name)
+@section('description', \Illuminate\Support\Str::limit($film->description ?? $film->name, 155))
+
 @section('content')
 
     @php
-        // Предположим, что контроллер передал фильм как $film
-        // Если нужно, можно передать еще коллекцию похожих фильмов в $relatedFilms
+        $genres = $film->genres->pluck('name');
     @endphp
 
-    <div class="col-12 mb-5">
-        <div class="col-12 d-flex"
-             style="background-image: url('{{ $film->background ? storage_url($film->background) : asset('images/background-placeholder.png') }}');background-size: cover;height: 500px">
-            <div class="col-9 mx-auto d-flex">
+    <!-- HERO -->
+    <section class="film-hero text-light"
+             style="background-image: linear-gradient(to top, #181818 0%, rgba(24,24,24,.75) 45%, rgba(0,0,0,.35) 100%), url('{{ $film->background ? storage_url($film->background) : asset('images/background-placeholder.png') }}');">
+        <div class="container py-5">
+            <div class="row g-4 align-items-end">
 
-                <!-- Левая колонка: кнопки, рейтинг -->
-                <div class="col-6 d-flex flex-column justify-content-end gap-3">
-                    <div class="col-12">
-                        <div style="width: 200px" class="rounded-2 overflow-hidden">
-                            <img
-                                src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}"
-                                style="width: 100%;height: 100%" alt="">
-                        </div>
+                <div class="col-5 col-md-3">
+                    <img src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}"
+                         class="w-100 rounded-3 shadow-lg film-hero-poster" alt="{{ $film->name }}">
+                </div>
+
+                <div class="col-12 col-md-9">
+                    @if($film->logo)
+                        <img src="{{ storage_url($film->logo) }}" class="mb-3" style="max-width:140px;max-height:70px" alt="">
+                    @endif
+
+                    <h1 class="fw-bold display-6 mb-2">{{ $film->name }}</h1>
+
+                    <div class="d-flex flex-wrap align-items-center gap-2 small text-light opacity-75 mb-3">
+                        @if($film->year)<span>{{ $film->year }}</span>@endif
+                        @if($film->category)<span>•</span><span>{{ $film->category->name }}</span>@endif
+                        @if($genres->isNotEmpty())<span>•</span><span>{{ $genres->join(', ') }}</span>@endif
                     </div>
-                    <div class="col-12">
-                        <p class="text-light fw-bold fs-5">{{ $film->name }}</p>
-                    </div>
-                    <div class="col-12 d-flex justify-content-start align-items-center gap-3">
-                        <button
-                            data-bs-toggle="modal" data-bs-target="#filmModal"
-                            class="btn btn-danger rounded-pill my-2 px-4 text-light">
-                            <i class="fa-solid fa-play me-1"></i> Watch
-                        </button>
 
-                        <div class="modal fade" id="filmModal" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content text-light" style="background-color: #181818">
-
-                                    <div class="modal-header border-0 pb-0">
-                                        <h5 class="modal-title">{{ $film->name }}</h5>
-                                        <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <video src="{{ storage_url($film->video) }}" controls
-                                               width="100%" height="100%"></video>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="btn btn-dark rounded-pill my-2 px-4">
-                            <i class="fa-solid fa-plus me-1"></i> Add to my playlist
-                        </div>
-
-                        <div class="col-auto d-flex gap-2">
-                            @for($i=1;$i<=5;$i++)
-                                <div class="col">
-                                    @if($film->rating >= $i)
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                    @elseif($film->rating >= $i - 0.5)
-                                        <i class="fa-solid fa-star-half-stroke text-warning"></i>
-                                    @else
-                                        <i class="fa-regular fa-star text-secondary"></i>
-                                    @endif
-                                </div>
+                    @if($film->rating > 0)
+                        <div class="d-flex align-items-center gap-1 mb-3">
+                            @for($i = 1; $i <= 5; $i++)
+                                @php $stars = $film->rating / 2; @endphp
+                                @if($stars >= $i)
+                                    <i class="fa-solid fa-star text-warning"></i>
+                                @elseif($stars >= $i - 0.5)
+                                    <i class="fa-solid fa-star-half-stroke text-warning"></i>
+                                @else
+                                    <i class="fa-regular fa-star text-secondary"></i>
+                                @endif
                             @endfor
+                            <span class="fw-bold ms-2">{{ number_format($film->rating, 1) }}</span>
                         </div>
-                        <div class="col-auto">
-                            <p class="text-light fw-bold">{{ $film->rating ?? 'N/A' }}</p>
-                        </div>
-                    </div>
+                    @endif
 
-                    <div class="col-12 d-flex justify-content-start align-items-center gap-3 text-light ms-3 mb-3">
-                        <div class="col-auto">
-                            <p><i class="fa-solid fa-thumbs-up me-1"></i> Like</p>
-                        </div>
-                        <div class="vr"></div>
-                        <div class="col-auto">
-                            <p><i class="fa-solid fa-share me-1"></i> Share</p>
-                        </div>
-                        <div class="vr"></div>
-                        <div class="col-auto">
-                            <p><i class="fa-solid fa-download me-1"></i> Download</p>
-                        </div>
-                    </div>
-                </div>
+                    @if($film->description)
+                        <p class="mb-4" style="max-width: 720px">{{ $film->description }}</p>
+                    @endif
 
-                <!-- Правая колонка: название, описание, детали -->
-                <div class="col-6 text-light d-flex flex-column gap-4 justify-content-center">
-                    <div class="col-12 d-flex justify-content-center align-items-center">
-                        <div style="width: 100px">
-                            <img
-                                src="{{ $film->logo ? storage_url($film->logo) : asset('images/logo-placeholder.png') }}"
-                                style="width: 100%" alt="{{ $film->name }}">
-                        </div>
-                    </div>
-                    <div class="col-12 text-nowrap">
-                        <p>
-                            {{ $film->year ?? 'N/A' }}
-                            <span style="font-size: 8px"><i class="fa-solid fa-circle"></i></span>
-                            R
-                            <span style="font-size: 8px"><i class="fa-solid fa-circle"></i></span>
-                            2h 44m <!-- можно заменить на $film->duration если есть -->
-                            <span style="font-size: 8px"><i class="fa-solid fa-circle"></i></span>
-                            {{ $film->category->name ?? 'N/A' }}
-                        </p>
-                    </div>
-                    <div class="col-12">
-                        <p>{{ $film->description ?? 'No description available.' }}</p>
-                    </div>
-                    <div class="col-12 d-flex text-nowrap">
-                        <div class="col-auto border-end pe-5">
-                            <div class="col-12"><i class="fa-solid fa-user-tie me-1"></i><span
-                                    class="fw-bold">Director:</span> {{ $film->director ?? 'N/A' }}</div>
-                            @if($film->actors)
-                                @foreach($film->actors as $actor)
-                                    <div class="col-12"><i
-                                            class="fa-solid fa-masks-theater me-1"></i> {{ $actor->name }}</div>
-                                @endforeach
-                            @endif
-                        </div>
-                        <div class="col ps-5">
-                            <div class="col-12"><i class="fa-solid fa-calendar me-1"></i> {{ $film->year ?? 'N/A' }}
-                            </div>
-                            <div class="col-12"><i
-                                    class="fa-solid fa-circle-nodes me-1"></i> {{ $film->main_genre ?? 'N/A' }}</div>
-                            <div class="col-12"><i class="fa-solid fa-icons me-1"></i>
-                                @foreach($film->genres->pluck('name') as $genre)
-                                    {{ $genre }}
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="col-6"></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Навигация вкладок -->
-        <div class="col-12 mt-2" style="border-bottom: 1px solid #393939">
-            <div class="col-9 mx-auto d-flex gap-5 fw-bold">
-                <div class="col-auto px-3 py-2 border-bottom border-3 border-danger text-light"><p>OVERVIEW</p></div>
-                <div class="col-auto px-3 py-2 border-danger text-secondary"><p>TRAILERS & MORE</p></div>
-                <div class="col-auto px-3 py-2 border-danger text-secondary"><p>MORE LIKE THIS</p></div>
-            </div>
-        </div>
-
-        <div class="col-12 mt-3">
-            <div class="col-9 mx-auto d-flex text-light gap-5">
-
-                <!-- Левая колонка: Cast & Crew -->
-                <div class="col-7">
-                    <div class="col-12 mb-3"><p>Cast & Crew</p></div>
-                    <div class="col-12 d-flex justify-content-start gap-3 overflow-hidden">
-                        @if(!empty($film->actors))
-                            @foreach($film->actors as $actor)
-                                <a href="{{ route('actor.index', $actor->id) }}" class="col-auto text-center">
-                                    <div class="actor-avatar skeleton">
-                                        <img
-                                            src="{{ $actor->avatar
-                                            ? storage_url($actor->avatar)
-                                            : asset('images/actor-placeholder.png') }}" alt="{{ $actor->name }}"
-                                            loading="lazy"
-                                            onload="this.parentElement.classList.remove('skeleton')"
-                                        >
-                                    </div>
-                                    <div style="width: 100px">
-                                        <p class="text-light mt-2 mb-0 text-truncate">{{ $actor->name }}</p>
-                                    </div>
-                                </a>
-                            @endforeach
+                    <div class="d-flex flex-wrap gap-2">
+                        @if($film->video)
+                            <button data-bs-toggle="modal" data-bs-target="#filmModal"
+                                    class="btn btn-danger text-white rounded-pill px-4">
+                                <i class="fa-solid fa-play me-1"></i> Watch trailer
+                            </button>
                         @endif
-
-                    </div>
-
-                    <div class="col-12 mt-4">
-                        <div class="col-12 mb-3"><p>More Like {{ $film->name }}</p></div>
-                        <div class="col-12 py-2 d-flex gap-3 overflow-auto">
-                            @if(!empty($relatedFilms))
-                                @foreach($relatedFilms as $related)
-                                    <a href="/film/{{ $related->id }}"
-                                       class="col d-flex flex-column related-card"
-                                       style="max-width:120px">
-
-                                        <div class="related-poster skeleton">
-                                            <img
-                                                src="{{ $related->poster
-                        ? storage_url($related->poster)
-                        : asset('images/poster-placeholder.png') }}"
-                                                alt="{{ $related->name }}"
-                                                loading="lazy"
-                                                onload="this.parentElement.classList.remove('skeleton')"
-                                            >
-                                        </div>
-
-                                        <p class="text-light mt-2 text-nowrap mb-0">{{ $related->name }}</p>
-                                        <p class="text-secondary small">{{ $related->year }}</p>
-                                    </a>
-                                @endforeach
-                            @endif
-
-                        </div>
+                        <button type="button" class="btn btn-outline-light text-white rounded-pill px-4"
+                                onclick="navigator.share ? navigator.share({title: @js($film->name), url: location.href}) : navigator.clipboard.writeText(location.href)">
+                            <i class="fa-solid fa-share me-1"></i> Share
+                        </button>
                     </div>
                 </div>
 
-                <!-- Правая колонка: Trailer & Clips -->
-                <div class="col d-flex flex-column gap-3">
-                    <div class="col-12 mb-3"><p>Trailer & Clips</p></div>
-                    @if($film->video)
-                        <div class="col-12 mb-3">
-                            <video src="{{ storage_url($film->video) }}" controls
-                                   style="width:100%; height:auto; border-radius:8px;"></video>
-                        </div>
-                    @else
-                        <p class="text-secondary">No trailer available.</p>
+            </div>
+        </div>
+    </section>
+
+    @if($film->video)
+        <div class="modal fade" id="filmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content text-light" style="background-color: #181818">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title">{{ $film->name }}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <video src="{{ storage_url($film->video) }}" controls preload="none" class="w-100 rounded"></video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- DETAILS -->
+    <div class="container text-light py-4">
+        <div class="row g-5">
+
+            <div class="col-12 col-lg-7">
+                <div class="d-flex flex-wrap gap-4 mb-4 small">
+                    @if($film->director)
+                        <div><span class="text-secondary d-block">Director</span>{{ $film->director }}</div>
+                    @endif
+                    @if($film->producer)
+                        <div><span class="text-secondary d-block">Producer</span>{{ $film->producer }}</div>
                     @endif
                 </div>
 
+                @if($film->actors->isNotEmpty())
+                    <h2 class="h5 mb-3">Cast</h2>
+                    <div class="d-flex gap-3 overflow-auto pb-2 mb-4">
+                        @foreach($film->actors as $actor)
+                            <a href="{{ route('actor.index', $actor->id) }}" class="text-center flex-shrink-0" style="width: 100px">
+                                <div class="actor-avatar skeleton">
+                                    <img src="{{ $actor->avatar ? storage_url($actor->avatar) : asset('images/actor-placeholder.png') }}"
+                                         alt="{{ $actor->name }}" loading="lazy"
+                                         onload="this.parentElement.classList.remove('skeleton')">
+                                </div>
+                                <p class="text-light mt-2 mb-0 text-truncate small">{{ $actor->name }}</p>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if($relatedFilms->isNotEmpty())
+                    <h2 class="h5 mb-3">More like {{ $film->name }}</h2>
+                    <div class="d-flex gap-3 overflow-auto pb-2">
+                        @foreach($relatedFilms as $related)
+                            <a href="/film/{{ $related->id }}" class="related-card flex-shrink-0" style="width:120px">
+                                <div class="related-poster skeleton">
+                                    <img src="{{ $related->poster ? storage_url($related->poster) : asset('images/poster-placeholder.png') }}"
+                                         alt="{{ $related->name }}" loading="lazy"
+                                         onload="this.parentElement.classList.remove('skeleton')">
+                                </div>
+                                <p class="text-light mt-2 mb-0 text-truncate small">{{ $related->name }}</p>
+                                <p class="text-secondary small">{{ $related->year }}</p>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
             </div>
+
+            <div class="col-12 col-lg-5">
+                <h2 class="h5 mb-3">Trailer</h2>
+                @if($film->video)
+                    <video src="{{ storage_url($film->video) }}" controls preload="metadata" class="w-100 rounded-3"></video>
+                @else
+                    <p class="text-secondary">No trailer available.</p>
+                @endif
+            </div>
+
         </div>
     </div>
 

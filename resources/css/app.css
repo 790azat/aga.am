@@ -1,5 +1,3 @@
-@import url('https://fonts.bunny.net/css?family=Nunito');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css');
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 a {
@@ -332,3 +330,33 @@ p {
 }
 
 
+
+/* Постер в карточке фильма: единые пропорции 2:3 вместо фиксированной высоты */
+.film-card-poster {
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #222;
+}
+
+.film-card-poster img {
+    transition: transform .3s ease;
+}
+
+a:hover .film-card-poster img {
+    transform: scale(1.05);
+}
+
+/* Шапка страницы фильма */
+.film-hero {
+    background-size: cover;
+    background-position: center top;
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+}
+
+.film-hero-poster {
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}

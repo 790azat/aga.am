@@ -71,21 +71,21 @@
                                     <div class="mb-3">
                                         <label class="form-label">Poster</label>
                                         <input type="file" name="poster" class="form-control" accept="image/*" onchange="previewImage(this,'posterPreview')">
-                                        <img id="posterPreview" src="{{ asset('images/poster-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:220px">
+                                        <img loading="lazy" id="posterPreview" src="{{ asset('images/poster-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:220px">
                                     </div>
 
                                     {{-- Background --}}
                                     <div class="mb-3">
                                         <label class="form-label">Background Image</label>
                                         <input type="file" name="background" class="form-control" accept="image/*" onchange="previewImage(this,'backgroundPreview')">
-                                        <img id="backgroundPreview" class="img-fluid mt-2 rounded d-none" style="max-height:220px">
+                                        <img loading="lazy" id="backgroundPreview" class="img-fluid mt-2 rounded d-none" style="max-height:220px">
                                     </div>
 
                                     {{-- Logo --}}
                                     <div class="mb-3">
                                         <label class="form-label">Film Logo</label>
                                         <input type="file" name="logo" class="form-control" accept="image/*" onchange="previewImage(this,'logoPreview')">
-                                        <img id="logoPreview" src="{{ asset('images/logo-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:120px">
+                                        <img loading="lazy" id="logoPreview" src="{{ asset('images/logo-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:120px">
                                     </div>
                                 </div>
 
@@ -184,19 +184,19 @@
                                     <div class="mb-3">
                                         <label class="form-label">Poster</label>
                                         <input type="file" name="poster" class="form-control" accept="image/*" onchange="previewImage(this,'editPosterPreview')">
-                                        <img id="editPosterPreview" src="{{ asset('images/poster-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:220px">
+                                        <img loading="lazy" id="editPosterPreview" src="{{ asset('images/poster-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:220px">
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Background Image</label>
                                         <input type="file" name="background" class="form-control" accept="image/*" onchange="previewImage(this,'editBackgroundPreview')">
-                                        <img id="editBackgroundPreview" class="img-fluid mt-2 rounded d-none" style="max-height:220px">
+                                        <img loading="lazy" id="editBackgroundPreview" class="img-fluid mt-2 rounded d-none" style="max-height:220px">
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Film Logo</label>
                                         <input type="file" name="logo" class="form-control" accept="image/*" onchange="previewImage(this,'editLogoPreview')">
-                                        <img id="editLogoPreview" src="{{ asset('images/logo-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:120px">
+                                        <img loading="lazy" id="editLogoPreview" src="{{ asset('images/logo-placeholder.png') }}" class="img-fluid mt-2 rounded" style="max-height:120px">
                                     </div>
                                 </div>
 
@@ -271,10 +271,10 @@
                     @foreach($films as $film)
                         <tr>
                             <td>{{ $film->id }}</td>
-                            <td><img src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}" style="max-height:50px" class="rounded"></td>
+                            <td><img loading="lazy" src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}" style="max-height:50px" class="rounded"></td>
                             <td>
                                 @if($film->logo)
-                                    <img src="{{ storage_url($film->logo) }}" style="max-height:50px" class="rounded">
+                                    <img loading="lazy" src="{{ storage_url($film->logo) }}" style="max-height:50px" class="rounded">
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif
@@ -295,7 +295,7 @@
                             </td>
                             <td>
                                 @if($film->background)
-                                    <img src="{{ storage_url($film->background) }}" style="max-height:40px" class="rounded">
+                                    <img loading="lazy" src="{{ storage_url($film->background) }}" style="max-height:40px" class="rounded">
                                 @else
                                     <span class="text-muted">—</span>
                                 @endif
@@ -377,14 +377,14 @@
                             <div class="modal-body">
                                 <div class="row g-3">
                                     <div class="col-md-4 text-center">
-                                        <img src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}" class="img-fluid rounded mb-2" style="max-height:150px">
+                                        <img loading="lazy" src="{{ $film->poster ? storage_url($film->poster) : asset('images/poster-placeholder.png') }}" class="img-fluid rounded mb-2" style="max-height:150px">
                                         @if($film->logo)
-                                            <img src="{{ storage_url($film->logo) }}" class="img-fluid rounded mb-2" style="max-height:80px">
+                                            <img loading="lazy" src="{{ storage_url($film->logo) }}" class="img-fluid rounded mb-2" style="max-height:80px">
                                         @else
                                             <span class="text-muted d-block mb-2">—</span>
                                         @endif
                                         @if($film->background)
-                                            <img src="{{ storage_url($film->background) }}" class="img-fluid rounded" style="max-height:80px">
+                                            <img loading="lazy" src="{{ storage_url($film->background) }}" class="img-fluid rounded" style="max-height:80px">
                                         @else
                                             <span class="text-muted d-block">—</span>
                                         @endif
